@@ -1,0 +1,5 @@
+Dans un exo, voir ce qui se passe quand on va modifier une infra existante dans le portail et qu'on refait un tf plan
+
+[avancé] Voir l'import d'un élément d'infra
+
+Voir ce qu'il y a à installer en plus pour terracost
