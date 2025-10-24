@@ -32,17 +32,13 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build Marp presentation
-        uses: marp-team/marp-action@v2
-        with:
-          input: cours.md
-          output: ./build/index.html
-          # Generate HTML presentation
-          html: true
-          # Enable MathJax support (used in slides)
-          engine: '@marp-team/marp-core'
+        uses: KoharaKazuya/marp-cli-action@v4
 
-      - name: Create .nojekyll file
-        run: touch ./build/.nojekyll
+      - name: Prepare build directory
+        run: |
+          mkdir -p build
+          mv cours.html build/index.html
+          touch build/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
