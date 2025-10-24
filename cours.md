@@ -23,10 +23,13 @@ Formation Infrastructure as Code avec Terraform
 
 ## Table des matières (suite)
 
-6. Débuter avec AWS
-7. Flux de travail Terraform
-8. Concepts avancés
-9. Outils alternatifs
+6. Flux de travail Terraform
+7. Concepts avancés
+8. Outils alternatifs
+
+## Déroulement de la journée
+
+  Cours puis TP, ce matin et cet après-midi
 
 ---
 
@@ -42,11 +45,13 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 
 ## Avantages clés de l'IaC
 
-- **Contrôle de version** : Suivre les modifications
-- **Reproductibilité** : Environnements identiques
-- **Automatisation** : Réduire les erreurs humaines
+- **"gitable"**
+  - Contrôle de version pour suivre les modifications
+  - Collaboration
+- **Reproductible**
+  - Environnements identiques
+  - **Automatisation** : Réduction des erreurs humaines
 - **Documentation** : Le code est source de documentation
-- **Collaboration** : Pratiques standard
 
 ---
 
@@ -56,6 +61,7 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 - Pas de cloud
 - Pas de virtualisation
 - Pas de conteneurs
+- Les infrastructures sont généralement de taille modeste
 - Configuration manuelle via SSH/RDP
 - Documentation dans des wikis
 - Sujet à la dérive et l'incohérence
@@ -68,6 +74,7 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 - Pas de cloud
 - Début de la virtualisation
 - Pas de conteneurs
+- La taille des infrastructures augmente
 - Outils : Puppet, Chef, Ansible
 - Automatisation de la configuration
 - Focus sur la configuration logicielle
@@ -79,6 +86,7 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 **Années 2010-aujourd'hui**
 - Début du cloud
 - Début des conteneurs
+- Explosion de la taille des infrastructures et de la diversité de leurs composants
 - Outils : Terraform, CloudFormation
 - Cycle de vie complet de l'infrastructure
 
@@ -104,21 +112,7 @@ Il permet de définir des ressources cloud et on-premise dans des fichiers de co
 - **Planification** : Prévisualiser les modifications avant de les appliquer
 - **Gestion des dépendances** : Résolution automatique
 
----
-
-## Workflow Terraform
-
-```
-Code Terraform (.tf)
-       ↓
-terraform init
-       ↓
-terraform plan
-       ↓
-terraform apply
-       ↓
-Ressources réelles
-```
+💡 _Gestion d'état, planification et dépendances seront vus en détail durant les exercices_
 
 ---
 
@@ -194,11 +188,10 @@ aws ec2 run-instances --image-id ami-xxx \
 
 ## Problèmes des scripts shell
 
-- ❌ Impératif : spécifier chaque étape
-- ❌ Pas de gestion d'état
-- ❌ Ré-exécution crée des doublons
-- ❌ Gestion d'erreurs complexe
-- ❌ Pas de gestion des dépendances
+- ❌ Modèle **Impératif** : spécifier chaque étape
+- ❌ Pas de gestion des dépendances : **dans le bon ordre**
+- ❌ Pas de gestion d'état : Ré-exécution crée des doublons
+- ❌ Gestion d'erreurs complexe : mon script a fait une erreur à la ligne 700 😱
 - ❌ Pas de dry-run
 
 ---
@@ -226,10 +219,10 @@ resource "aws_instance" "web" {
 
 ## Avantages de Terraform
 
-- ✅ Déclaratif : décrire l'état souhaité
+- ✅ Modèle **Déclaratif** : décrire l'état souhaité
+- ✅ Résolution automatique des dépendances : l'ordre n'importe pas
 - ✅ Gestion d'état : il sait ce qui existe
 - ✅ Idempotent : on peut l'exécuter plusieurs fois sans problème
-- ✅ Résolution automatique des dépendances
 - ✅ Mises à jour et suppressions faciles
 
 ---
@@ -245,67 +238,36 @@ resource "aws_instance" "web" {
 
 ---
 
+## Workflow Terraform
+
+```
+Code Terraform (.tf)
+       ↓
+terraform init
+       ↓
+terraform plan
+       ↓
+terraform apply
+       ↓
+Ressources réelles
+```
+
+---
+
 # 4. Terraform vs Ansible
 
 ---
 
 ## Différences clés
 
-| Aspect | Ansible | Terraform |
+|   | Ansible | Terraform |
 |--------|---------|-----------|
-| **Objectif** | Configuration | Provisionnement |
-| **Langage** | YAML | HCL (Hashicorp Configuration language) |
+| **Objectif** | Configuration de serveurs| Provisionnement de ressources|
+| **Langage** | YAML | HCL (Hashicorp Configuration Language) |
 | **État** | Sans état | Avec état |
 | **Approche** | Push (SSH) | API-based |
-| **Meilleur pour** | Configuration de serveurs | Création d'infrastructure |
 
----
-
-## Objectif : Ansible
-
-**Gestion de configuration**
-- "Comment configurer ces serveurs ?"
-- Infrastructure mutable
-- Ex: Installer Nginx, configurer firewall
-
----
-
-## Objectif : Terraform
-
-**Provisionnement d'infrastructure**
-- "De quelle infrastructure ai-je besoin ?"
-- Infrastructure immuable
-- Ex: Créer VPC, EC2, load balancers, ...
-
----
-
-## Gestion d'état : Ansible
-
-```yaml
-- name: Ensure Nginx is installed
-  apt:
-    name: nginx
-    state: present
-```
-
-- Se connecte et vérifie à chaque fois
-- Pas de fichier d'état persistant
-- Peut être lent pour de grandes infrastructures
-
----
-
-## Gestion d'état : Terraform
-
-```hcl
-resource "aws_instance" "web" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
-}
-```
-
-- Maintient `terraform.tfstate`
-- Sait exactement ce qui existe
-- Planification rapide
+⚠️ Il y a des actions réalisables avec les deux outils
 
 ---
 
@@ -353,6 +315,8 @@ output "instance_ip" {
 - Gestion de fichiers de configuration
 - Orchestration multi-étapes
 
+➡️ "Comment configurer ces serveurs ?"
+
 ---
 
 ## Quand utiliser Terraform ?
@@ -360,6 +324,8 @@ output "instance_ip" {
 - Création d'infrastructure cloud
 - Gestion du cycle de vie (créer, modifier, détruire) de ressources cloud
 - Modules d'infrastructure réutilisables
+
+➡️ "De quelle infrastructure ai-je besoin ?"
 
 ---
 
@@ -463,7 +429,7 @@ resource "aws_eip" "web_ip" {
 
 ---
 
-## Data Sources
+## Data Sources (Sources de données)
 
 Récupérer des informations sur des ressources existantes.
 
@@ -573,12 +539,19 @@ instance_id = "i-0abcd1234efgh5678"
 
 ## State (État)
 
-Le fichier `terraform.tfstate` est la base de données de Terraform.
-
-**Contient :**
+Le fichier `terraform.tfstate` est la base de données de Terraform :
 - IDs des ressources
 - Configuration actuelle
 - Métadonnées et dépendances
+
+Terraform :
+- Le tient à jour
+- Sait exactement ce qui existe
+- Compare facilement le code et le _state_ : planification rapide
+
+⛔ Ne pas modifier l'infrastructure par un autre moyen
+
+⛔ Ne pas modifier le _state_ soi-même
 
 ---
 
@@ -603,7 +576,7 @@ terraform {
 
 ⚠️ **Considérations importantes :**
 - Contient des données sensibles - sécurisez-le !
-- Ne jamais éditer manuellement
+- Ne jamais l'éditer manuellement
 - Utiliser l'état distant pour la collaboration
 - Activer le verrouillage d'état
 
@@ -611,7 +584,7 @@ terraform {
 
 ## Idempotence
 
-Exécuter plusieurs fois `terraform apply` → même résultat
+Exécuter plusieurs fois `terraform apply` → même résultat final
 
 ```bash
 $ terraform apply  # Crée 1 instance
@@ -693,118 +666,6 @@ resource "aws_instance" "web" {
 - Il n'y a pas d'ordre à respecter (puisque c'est **déclaratif**)
 - Terraform lit tous les fichiers du répertoire courant, retrouve les providers déclarés, les définitions de variables, les `locals`, les ressources, les outputs, et construit un arbre de dépendances pour savoir dans quel ordre il faut procéder
 - **Conclusion:** on peut tout écrire dans 1 seul fichier `.tf`, **mais** on préférera répartir les éléments dans des fichiers avec des noms qui ont du sens
----
-
-# 6. Débuter avec AWS
-
----
-
-## Prérequis
-
-1. **Compte AWS** : aws.amazon.com
-2. **AWS CLI** : Installer et configurer
-3. **Terraform** : Télécharger depuis terraform.io
-4. **Éditeur** : VS Code recommandé
-
----
-
-## Extension VS Code : HashiCorp Terraform
-
-**Fonctionnalités :**
-- Coloration syntaxique
-- IntelliSense et auto-complétion
-- Intégration des commandes
-- Formatage automatique
-
-```bash
-code --install-extension hashicorp.terraform
-```
-
----
-
-## Autres extensions utiles
-
-```bash
-# Terraform Autocomplete
-code --install-extension erd0s.terraform-autocomplete
-
-# AWS Toolkit
-code --install-extension amazonwebservices.aws-toolkit-vscode
-
-# Infracost (estimation coûts)
-code --install-extension Infracost.infracost
-```
-
----
-
-## Configuration VS Code
-
-```json
-{
-  "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform",
-    "editor.formatOnSave": true
-  },
-  "terraform.languageServer": {
-    "enabled": true
-  }
-}
-```
-
----
-
-## Configuration AWS : Option 1
-
-**AWS CLI :**
-```bash
-aws configure
-```
-
-Entrer :
-- AWS Access Key ID
-- AWS Secret Access Key
-- Région (ex: eu-west-3)
-- Format de sortie (json)
-
----
-
-## Configuration AWS : Option 2
-
-**Variables d'environnement :**
-```bash
-export AWS_ACCESS_KEY_ID="votre-access-key"
-export AWS_SECRET_ACCESS_KEY="votre-secret-key"
-export AWS_DEFAULT_REGION="eu-west-3"
-```
-
----
-
-## Première configuration Terraform
-
-```hcl
-provider "aws" {
-  region = "eu-west-3"
-}
-
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = "my-unique-terraform-bucket-12345"
-
-  tags = {
-    Name        = "My Terraform Bucket"
-    Environment = "Learning"
-  }
-}
-```
-
----
-
-## Output du bucket
-
-```hcl
-output "bucket_name" {
-  value = aws_s3_bucket.my_bucket.id
-}
-```
 
 ---
 
@@ -822,7 +683,7 @@ terraform destroy   # Détruire
 
 ---
 
-# 7. Flux de travail Terraform
+# 6. Flux de travail Terraform
 
 ---
 
@@ -965,7 +826,7 @@ terraform graph | dot -Tpng > graph.png
 
 ---
 
-# 8. Concepts avancés
+# 7. Concepts avancés
 
 ---
 
@@ -1007,7 +868,7 @@ resource "aws_instance" "server" {
 
 ---
 
-## for_each (préféré)
+## for_each
 
 ```hcl
 variable "instances" {
@@ -1151,7 +1012,7 @@ resource "aws_instance" "web" {
 
 ---
 
-# 9. Outils alternatifs
+# 8. Outils alternatifs
 
 ---
 
@@ -1164,6 +1025,8 @@ Fork open-source de Terraform créé suite au changement de licence de Terraform
 - Même syntaxe HCL
 - Géré par la communauté
 - Vraiment open source
+
+🔍 En fait le changement de licence impacte peu de monde et ne concerne que les entreprises qui vendent une solution d'infrastructure ou de gestion de cloud intégrant Terraform. Quelques sociétés concernées : Pulumi, Spacelift, Scalr, Aiven
 
 ---
 
