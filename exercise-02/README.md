@@ -66,8 +66,8 @@ Amazon S3 (Simple Storage Service) est le service de stockage objet d'AWS. C'est
 1. Dans le dossier `starter/`, créez un fichier `main.tf`
 
 2. Configurez les providers nécessaires :
-   - Le provider AWS (version ~> 5.0)
-   - Le provider random (pour générer un suffixe unique)
+   - Le provider AWS (https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+   - Le provider random (comme dans l'exercice précédent)
 
 3. Configurez le provider AWS pour utiliser la région `eu-west-3` (Paris)
 
@@ -142,22 +142,27 @@ terraform output
 
 ### Partie 5 : Tester l'upload d'un fichier
 
+0. Lisez l'aide de la commande `output` :
+```bash
+terraform output -help
+```
+
 1. Créez un fichier de test local :
 ```bash
 echo "Hello from Terraform!" > test.txt
 ```
 
-2. Uploadez-le dans votre bucket :
+1. Uploadez-le dans votre bucket :
 ```bash
 aws s3 cp test.txt s3://$(terraform output -raw bucket_name)/
 ```
 
-3. Listez le contenu de votre bucket :
+1. Listez le contenu de votre bucket :
 ```bash
 aws s3 ls s3://$(terraform output -raw bucket_name)/
 ```
 
-4. Téléchargez le fichier pour vérifier :
+1. Téléchargez le fichier pour vérifier :
 ```bash
 aws s3 cp s3://$(terraform output -raw bucket_name)/test.txt downloaded.txt
 cat downloaded.txt

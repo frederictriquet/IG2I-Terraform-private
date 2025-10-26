@@ -4,6 +4,11 @@ theme: default
 paginate: true
 math: mathjax
 ---
+<style>
+section::after {
+    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total) 
+}
+</style>
 
 # Cours d'introduction à Terraform
 
@@ -190,7 +195,7 @@ aws ec2 run-instances --image-id ami-xxx \
 
 - ❌ Modèle **Impératif** : spécifier chaque étape
 - ❌ Pas de gestion des dépendances : **dans le bon ordre**
-- ❌ Pas de gestion d'état : Ré-exécution crée des doublons
+- ❌ Pas de gestion d'état : Une ré-exécution crée des doublons
 - ❌ Gestion d'erreurs complexe : mon script a fait une erreur à la ligne 700 😱
 - ❌ Pas de dry-run
 

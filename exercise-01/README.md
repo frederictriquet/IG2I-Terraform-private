@@ -29,6 +29,8 @@ terraform {
 }
 ```
 
+Sa documentation se trouve ici : https://registry.terraform.io/providers/hashicorp/random/latest/docs (les notions de `keepers` et de `ephemeral resources` ne sont pas utiles pour nous).
+
 3. Créez les ressources suivantes :
    - Un `random_pet` qui génère un nom de serveur (2 mots séparés par un tiret)
    - Un `random_integer` qui génère un numéro de port entre 8000 et 8999
