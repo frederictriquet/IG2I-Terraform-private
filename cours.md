@@ -68,8 +68,7 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 - Pas de conteneurs
 - Les infrastructures sont généralement de taille modeste
 - Configuration manuelle via SSH/RDP
-- Documentation dans des wikis
-- Sujet à la dérive et l'incohérence
+- Documentation dans des wikis → Risques de dérive et d'incohérence
 
 ---
 
@@ -111,13 +110,13 @@ Il permet de définir des ressources cloud et on-premise dans des fichiers de co
 
 ## Caractéristiques clés
 
-- **Langage déclaratif** : Décrire ce que vous voulez
-- **Agnostique du cloud** : AWS, Azure, GCP, etc.
-- **Gestion d'état** : Suit l'état actuel de l'infrastructure
-- **Planification** : Prévisualiser les modifications avant de les appliquer
+- **Langage déclaratif** : Description du résultat final attendu
+- **Agnostique du cloud** : Un seul outil pour AWS, Azure, GCP, etc.
+- **Gestion d'état** : L'état actuel de l'infrastructure est stocké dans une base de données
+- **Planification** : Prévisualisation des modifications avant de les appliquer
 - **Gestion des dépendances** : Résolution automatique
 
-💡 _Gestion d'état, planification et dépendances seront vus en détail durant les exercices_
+💡 _Gestion d'état, planification et dépendances seront vues en détail durant les exercices_
 
 ---
 
@@ -169,6 +168,7 @@ resource "aws_instance" "web" {
 - ✅ Une commande : `terraform apply`
 - ✅ Documenté dans le code
 - ✅ Scalable (1 ou 100 instances)
+- ✅ Outils qui analysent le code terraform
 
 ---
 
@@ -193,10 +193,10 @@ aws ec2 run-instances --image-id ami-xxx \
 
 ## Problèmes des scripts shell
 
-- ❌ Modèle **Impératif** : spécifier chaque étape
+- ❌ Modèle **Impératif** : Il faut spécifier chaque étape
 - ❌ Pas de gestion des dépendances : **dans le bon ordre**
 - ❌ Pas de gestion d'état : Une ré-exécution crée des doublons
-- ❌ Gestion d'erreurs complexe : mon script a fait une erreur à la ligne 700 😱
+- ❌ Gestion d'erreurs complexe : Mon script échoue à la ligne 700... 😱😱😱
 - ❌ Pas de dry-run
 
 ---

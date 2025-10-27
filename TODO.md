@@ -7,6 +7,8 @@ Voir ce qu'il y a à installer en plus pour terracost
 voir la commande taint
 
 
+installer ms-vscode-remote.remote-ssh
+
 -----
 
 
