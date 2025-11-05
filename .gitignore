@@ -50,3 +50,11 @@ config
 
 # Backup files
 *.bak
+
+# Marp Build Outputs
+cours.html
+build/
+
+# Node.js Dependencies
+node_modules/
+package-lock.json

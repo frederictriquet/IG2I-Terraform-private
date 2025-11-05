@@ -6,7 +6,19 @@ math: mathjax
 ---
 <style>
 section::after {
-    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total) 
+    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total)
+}
+.highlight-red {
+    color: red;
+    font-weight: bold;
+}
+.highlight-blue {
+    color: blue;
+    font-weight: bold;
+}
+.highlight-green {
+    color: green;
+    font-weight: bold;
 }
 </style>
 
@@ -44,7 +56,10 @@ Formation Infrastructure as Code avec Terraform
 
 ## Qu'est-ce que l'IaC ?
 
-L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnement de l'infrastructure via des fichiers de définition lisibles par machine.
+L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnement de l'infrastructure via des fichiers de définition lisibles par la machine.
+
+<!--
+du code = des fichiers suffisamment simples pour être lus et écrits par l'Homme / suffisamment structurés pour être compris par la machine -->
 
 ---
 
@@ -70,6 +85,13 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 - Configuration manuelle via SSH/RDP
 - Documentation dans des wikis → Risques de dérive et d'incohérence
 
+<!-- les outils apparaissent avec les besoins
+au début : infra simples
+
+avant 2000 : il y a de la virtualisation mais pas pour faire de la prod
+
+au fil des ans : augmentation de la puissance et baisse des coûts
+ -->
 ---
 
 ## Évolution : Gestion de configuration
@@ -83,6 +105,10 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 - Automatisation de la configuration
 - Focus sur la configuration logicielle
 
+<!--
+début de la virtu pour de la prod
+
+-->
 ---
 
 ## Évolution : Infrastructure as Code
@@ -261,16 +287,22 @@ Ressources réelles
 
 # 4. Terraform vs Ansible
 
+<!--
+on parle souvent de ces 2 outils
+on peut les confondre (quand on ne les connaît pas bien)
+
+points communs : IaC, HashiCorp
+-->
 ---
 
 ## Différences clés
 
-|   | Ansible | Terraform |
-|--------|---------|-----------|
-| **Objectif** | Configuration de serveurs| Provisionnement de ressources|
-| **Langage** | YAML | HCL (Hashicorp Configuration Language) |
-| **État** | Sans état | Avec état |
-| **Approche** | Push (SSH) | API-based |
+|              | Ansible                   | Terraform                              |
+| ------------ | ------------------------- | -------------------------------------- |
+| **Objectif** | Configuration de serveurs | Provisionnement de ressources          |
+| **Langage**  | YAML                      | HCL (Hashicorp Configuration Language) |
+| **État**     | Sans état                 | Avec état                              |
+| **Approche** | Push (SSH)                | API-based                              |
 
 ⚠️ Il y a des actions réalisables avec les deux outils
 
@@ -392,7 +424,7 @@ provider "google" {
 ## Providers populaires
 
 - **Cloud** : AWS, Azure, Google Cloud
-- **Containers** : Kubernetes, Docker
+- **Conteneurs** : Kubernetes, Docker
 - **DevOps** : GitHub, GitLab
 - **Monitoring** : Datadog, PagerDuty
 - **Et plus de 2000 autres !**
@@ -405,19 +437,18 @@ Les ressources sont l'élément central de Terraform.
 Elles sont fournies par les providers.
 1 ressource $\approx$ 1 élément d'infrastructure
 **Syntaxe :**
-```hcl
-resource "TYPE_RESSOURCE" "NOM" {
+
+<pre>resource "<span class="highlight-red">TYPE_RESSOURCE</span>" "<span class="highlight-blue">NOM</span>" {
   argument1 = valeur1
   argument2 = valeur2
-}
-```
+}</pre>
 
 ---
 
 ## Exemple de ressource
 
-```hcl
-resource "aws_instance" "web" {
+<pre>
+resource "<span class="highlight-red">aws_instance</span>" "<span class="highlight-blue">web</span>" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
 
@@ -428,18 +459,18 @@ resource "aws_instance" "web" {
 
 # Référencer une autre ressource
 resource "aws_eip" "web_ip" {
-  instance = aws_instance.web.id
+  instance = <span class="highlight-red">aws_instance</span>.<span class="highlight-blue">web</span>.id
 }
-```
+</pre>
 
 ---
 
 ## Data Sources (Sources de données)
 
-Récupérer des informations sur des ressources existantes.
+Récupérer et utiliser des informations sur des ressources existantes.
 
-```hcl
-data "aws_ami" "amazon_linux" {
+<pre>
+<span class="highlight-green">data</span> "<span class="highlight-red">aws_ami</span>" "<span class="highlight-blue">amazon_linux</span>" {
   most_recent = true
   owners      = ["amazon"]
 
@@ -448,18 +479,12 @@ data "aws_ami" "amazon_linux" {
     values = ["amzn2-ami-hvm-*"]
   }
 }
-```
 
----
-
-## Utiliser une Data Source
-
-```hcl
 resource "aws_instance" "web" {
-  ami = data.aws_ami.amazon_linux.id
+  ami = <span class="highlight-green">data</span>.<span class="highlight-red">aws_ami</span>.<span class="highlight-blue">amazon_linux</span>.id
   instance_type = "t2.micro"
 }
-```
+</pre>
 
 ---
 
@@ -574,6 +599,7 @@ terraform {
   }
 }
 ```
+⚠️ il faut créer ce bucket **avant** d'utiliser terraform ⚠️
 
 ---
 
@@ -584,6 +610,11 @@ terraform {
 - Ne jamais l'éditer manuellement
 - Utiliser l'état distant pour la collaboration
 - Activer le verrouillage d'état
+
+<!--
+sur AWS le state locking se fait avec une base dynamoDB,
+sur Azure le blob storage le gère tout seul, idem chez GCP
+-->
 
 ---
 
@@ -597,10 +628,21 @@ $ terraform apply  # Aucun changement
 $ terraform apply  # Aucun changement
 ```
 
-**Comment :**
+**Comment ça marche :**
 1. Lire l'état souhaité (`.tf`)
 2. Lire l'état actuel (`.tfstate`)
 3. Appliquer uniquement les différences
+
+<!--
+on peut dire qu'il y 3 états:
+- l'état souhaité qu'on a écrit dans les fichiers tf
+- l'état obtenu par terraform qu'il conserve dans le tfstate
+- l'état réel de l'infra
+-->
+
+---
+
+# TP
 
 ---
 
@@ -814,6 +856,10 @@ terraform state rm aws_instance.web
 terraform state mv aws_instance.old aws_instance.new
 ```
 
+<!--
+le state mv sert quand on renomme une ressource dans le code tf
+-->
+
 ---
 
 ## Autres commandes utiles
@@ -985,7 +1031,13 @@ resource "aws_instance" "web" {
 
 ## Remote State Data Source
 
-Partager outputs entre configurations.
+Utiliser dans un projet B des informations qui ont été créées dans le projet A.
+Les deux projets sont pourtant bien distincts.
+
+**Exemples**
+- Projet A : création d'une base de données / Projets B,C,D... : différentes applications qui consomment la BDD
+- Projet A : création d'un keyvault / Projets B,C,D... : applications qui accèdent aux secrets stockés
+---
 
 **Projet A :**
 ```hcl
@@ -994,9 +1046,6 @@ output "vpc_id" {
 }
 ```
 
----
-
-## Remote State : Consommation
 
 **Projet B :**
 ```hcl
@@ -1008,7 +1057,6 @@ data "terraform_remote_state" "vpc" {
     region = "us-east-1"
   }
 }
-
 # Utiliser
 resource "aws_instance" "web" {
   subnet_id = data.terraform_remote_state.vpc.outputs.subnet_id
