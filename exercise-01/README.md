@@ -9,13 +9,13 @@
 
 ## Contexte
 
-Le provider `random` de Terraform permet de générer des valeurs aléatoires (noms, nombres, mots de passe, etc.). C'est un excellent outil pédagogique car il ne nécessite aucune configuration d'infrastructure cloud et permet de se concentrer sur les mécanismes fondamentaux de Terraform.
+Le provider `random` de Terraform permet de générer des valeurs aléatoires (noms, nombres, mots de passe, etc.). Il ne nécessite aucune configuration d'infrastructure cloud et permet de se concentrer sur les mécanismes fondamentaux de Terraform.
 
 ## Instructions
 
 ### Partie 1 : Première configuration
 
-1. Dans le dossier `starter/`, créez un fichier `main.tf`
+1. Dans le dossier `exercise-01/`, créez un fichier `main.tf`
 
 2. Configurez le provider random :
 ```hcl

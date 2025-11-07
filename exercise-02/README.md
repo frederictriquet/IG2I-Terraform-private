@@ -63,7 +63,7 @@ Amazon S3 (Simple Storage Service) est le service de stockage objet d'AWS. C'est
 
 ### Partie 1 : Configuration de base
 
-1. Dans le dossier `starter/`, créez un fichier `main.tf`
+1. Dans le dossier `exercise-02/`, créez un fichier `main.tf`
 
 2. Configurez les providers nécessaires :
    - Le provider AWS (https://registry.terraform.io/providers/hashicorp/aws/latest/docs)

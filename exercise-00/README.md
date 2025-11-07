@@ -26,17 +26,17 @@ Avant de commencer à travailler avec Terraform, il est essentiel de préparer c
 sudo yum install -y yum-utils
 ```
 
-1. **Ajouter le dépôt officiel HashiCorp** :
+2. **Ajouter le dépôt officiel HashiCorp** :
 ```bash
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 ```
 
-1. **Installer Terraform** :
+3. **Installer Terraform** :
 ```bash
 sudo yum -y install terraform
 ```
 
-1. **Vérifier l'installation** :
+4. **Vérifier l'installation** :
 ```bash
 terraform version
 ```

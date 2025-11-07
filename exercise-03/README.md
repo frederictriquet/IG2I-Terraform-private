@@ -23,7 +23,7 @@ Les **variables** Terraform permettent de rendre le code paramétrable et réuti
 
 ### Partie 1 : Analyser le code existant
 
-1. Dans le dossier `starter/`, vous trouverez le code de l'exercice 2
+1. Dans le dossier `exercise-03/starter/`, vous trouverez le code de l'exercice 2
 
 2. Identifiez toutes les valeurs codées en dur :
    - La région AWS
@@ -36,7 +36,7 @@ Les **variables** Terraform permettent de rendre le code paramétrable et réuti
 
 ### Partie 2 : Créer le fichier variables.tf
 
-1. Créez un fichier `variables.tf` dans le dossier `starter/`
+1. Créez un fichier `variables.tf` dans le dossier `exercise-03/`
 
 2. Déclarez votre première variable pour la région AWS :
 ```hcl

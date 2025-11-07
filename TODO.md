@@ -4,7 +4,6 @@ Dans un exo, voir ce qui se passe quand on va modifier une infra existante dans 
 
 Voir ce qu'il y a à installer en plus pour terracost
 
-voir la commande taint
 
 voir ce qui se passe quand on renomme une ressource dans le code tf et introduire l'utilisation de terraform state mv aws_instance.old aws_instance.new
 

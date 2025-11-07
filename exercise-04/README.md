@@ -34,7 +34,7 @@ Les **locals** (valeurs locales) permettent de résoudre ces problèmes en défi
 
 ### Partie 1 : Identifier les redondances
 
-1. Dans le dossier `starter/`, examinez votre code de l'exercice 3
+1. Dans le dossier `exercise-04/starter/`, examinez votre code de l'exercice 3
 
 2. Identifiez les valeurs répétées. Par exemple :
    - Le nom du bucket : `"${var.bucket_prefix}-${random_id.bucket_suffix.hex}"`
@@ -45,7 +45,7 @@ Les **locals** (valeurs locales) permettent de résoudre ces problèmes en défi
 
 ### Partie 2 : Créer le fichier locals.tf
 
-1. Créez un fichier `locals.tf` dans le dossier `starter/`
+1. Créez un fichier `locals.tf` dans le dossier `exercise-04/`
 
 2. Commencez par créer un local pour le nom du bucket :
 
