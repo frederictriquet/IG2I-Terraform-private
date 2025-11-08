@@ -21,6 +21,8 @@ Avant de commencer à travailler avec Terraform, il est essentiel de préparer c
 
 ## Partie 1 : Installation de Terraform sur Red Hat
 
+💡 Une super bonne idée : mettre les tâches qui suivent dans un playbook Ansible que vous jouerez sur votre VM.
+
 1. **Installer `yum-config-manager` (si nécessaire)** :
 ```bash
 sudo yum install -y yum-utils
@@ -93,7 +95,9 @@ code --install-extension erd0s.terraform-autocomplete
 - Suggestions contextuelles
 - Documentation inline
 
-#### Extension 3 : AWS Toolkit
+<!-- pas sûr que ce soit utile car ils vont avoir le VSCode sur leur machine, tandis que
+ le pilotage d'AWS se fera depuis la VM  -->
+<!-- #### Extension 3 : AWS Toolkit
 
 ```bash
 code --install-extension amazonwebservices.aws-toolkit-vscode
@@ -102,7 +106,7 @@ code --install-extension amazonwebservices.aws-toolkit-vscode
 **Fonctionnalités** :
 - Explorateur de ressources AWS
 - Intégration avec AWS CLI
-- Visualisation des ressources cloud
+- Visualisation des ressources cloud -->
 
 ---
 
@@ -137,14 +141,9 @@ code .
     "editor.defaultFormatter": "hashicorp.terraform",
     "editor.formatOnSave": true
   },
-  "terraform.languageServer": {
-    "enabled": true,
-    "args": []
-  },
-  "terraform.experimentalFeatures": {
-    "validateOnSave": true,
-    "prefillRequiredFields": true
-  },
+  "terraform.validation.enableEnhancedValidation": true,
+  "terraform.experimentalFeatures.validateOnSave": true,
+  "terraform.experimentalFeatures.prefillRequiredFields": true,
   "files.associations": {
     "*.tf": "terraform",
     "*.tfvars": "terraform-vars"
@@ -154,9 +153,9 @@ code .
 
 **Explications de la configuration** :
 - `formatOnSave: true` : Formate automatiquement le code à la sauvegarde
-- `languageServer.enabled: true` : Active le serveur de langage pour l'auto-complétion
+- `enableEnhancedValidation: true` : Active la validation améliorée (activée par défaut)
 - `validateOnSave: true` : Valide la syntaxe à chaque sauvegarde
-- `prefillRequiredFields: true` : Pré-remplit les champs obligatoires
+- `prefillRequiredFields: true` : Pré-remplit les champs obligatoires lors de l'auto-complétion
 
 ---
 

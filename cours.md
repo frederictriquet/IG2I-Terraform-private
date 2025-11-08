@@ -157,7 +157,7 @@ Il permet de définir des ressources cloud et on-premise dans des fichiers de co
 2. Naviguer vers EC2
 3. Cliquer sur "Launch Instance"
 4. Configurer AMI, type, stockage, tags
-5. Lancer et sauvegarder la clé TODO vérifier ce que c'est
+5. Lancer et sauvegarder la clé
 
 ---
 
@@ -633,77 +633,9 @@ $ terraform apply  # Aucun changement
 2. Lire l'état actuel (`.tfstate`)
 3. Appliquer uniquement les différences
 
-<!--
-on peut dire qu'il y 3 états:
-- l'état souhaité qu'on a écrit dans les fichiers tf
-- l'état obtenu par terraform qu'il conserve dans le tfstate
-- l'état réel de l'infra
--->
-
 ---
 
 # TP
-
----
-
-## Modules
-
-Conteneurs pour plusieurs ressources utilisées ensemble.
-
-**Structure :**
-```
-modules/
-  └── vpc/
-      ├── main.tf
-      ├── variables.tf
-      └── outputs.tf
-```
-
----
-
-## Définition de module
-
-```hcl
-resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr
-
-  tags = {
-    Name = var.vpc_name
-  }
-}
-
-resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public_subnet_cidr
-}
-```
-
----
-
-## Utilisation du module
-
-```hcl
-module "vpc" {
-  source = "./modules/vpc"
-
-  vpc_name           = "production-vpc"
-  vpc_cidr           = "10.0.0.0/16"
-  public_subnet_cidr = "10.0.1.0/24"
-}
-
-resource "aws_instance" "web" {
-  subnet_id = module.vpc.public_subnet_id
-}
-```
-
----
-
-## Avantages des modules
-
-- ✅ Réutilisabilité du code
-- ✅ Organisation
-- ✅ Encapsulation
-- ✅ Contrôle de version des composants
 
 ---
 
@@ -713,6 +645,16 @@ resource "aws_instance" "web" {
 - Il n'y a pas d'ordre à respecter (puisque c'est **déclaratif**)
 - Terraform lit tous les fichiers du répertoire courant, retrouve les providers déclarés, les définitions de variables, les `locals`, les ressources, les outputs, et construit un arbre de dépendances pour savoir dans quel ordre il faut procéder
 - **Conclusion:** on peut tout écrire dans 1 seul fichier `.tf`, **mais** on préférera répartir les éléments dans des fichiers avec des noms qui ont du sens
+
+---
+
+## Les trois états dans Terraform
+
+![Les trois états dans Terraform](./images/trois-etats-terraform.svg)
+
+- **État souhaité** : Ce que vous écrivez dans vos fichiers `.tf`
+- **État connu** : Ce que Terraform a enregistré dans `.tfstate`
+- **État réel** : Ce qui existe réellement dans l'infrastructure
 
 ---
 
@@ -752,7 +694,7 @@ terraform init
 
 **Quand l'exécuter :**
 - Première fois dans un projet
-- Après ajout de providers/modules
+- Après l'ajout de providers/modules
 
 ---
 
@@ -879,6 +821,69 @@ terraform graph | dot -Tpng > graph.png
 
 # 7. Concepts avancés
 
+  Modules, locals, count, for_each, ...
+
+---
+
+## Modules
+
+Conteneurs pour plusieurs ressources utilisées ensemble.
+
+**Structure :**
+```
+modules/
+  └── vpc/
+      ├── main.tf
+      ├── variables.tf
+      └── outputs.tf
+```
+
+---
+
+## Définition de module
+
+```hcl
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr
+
+  tags = {
+    Name = var.vpc_name
+  }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.public_subnet_cidr
+}
+```
+
+---
+
+## Utilisation du module
+
+```hcl
+module "vpc" {
+  source = "./modules/vpc"
+
+  vpc_name           = "production-vpc"
+  vpc_cidr           = "10.0.0.0/16"
+  public_subnet_cidr = "10.0.1.0/24"
+}
+
+resource "aws_instance" "web" {
+  subnet_id = module.vpc.public_subnet_id
+}
+```
+
+---
+
+## Avantages des modules
+
+- ✅ Réutilisabilité du code
+- ✅ Organisation
+- ✅ Encapsulation
+- ✅ Contrôle de version des composants
+
 ---
 
 ## Locals
@@ -898,6 +903,61 @@ resource "aws_instance" "web" {
   tags = merge(local.common_tags, {
     Name = local.instance_name
   })
+}
+```
+
+---
+
+## Variables vs Locals : Quelle différence ?
+
+| Aspect | **Variables** (`var.*`) | **Locals** (`local.*`) |
+|--------|-------------------------|------------------------|
+| **Nature** | Entrées configurables | Valeurs calculées internes |
+| **Source** | Fournies par l'utilisateur | Dérivées de variables/ressources |
+| **Modification** | Peut changer entre exécutions | Calculée à chaque exécution |
+| **Usage** | Paramètres d'entrée | Éviter la répétition de calculs |
+
+**Règle d'or :**
+- Utilisez **variables** pour ce qui vient de l'extérieur
+- Utilisez **locals** pour ce qui est calculé/transformé en interne
+
+---
+
+## Exemple : Variables vs Locals
+
+```hcl
+# Variables : entrées utilisateur
+variable "environment" {
+  type = string
+}
+
+variable "project" {
+  type = string
+}
+
+# Locals : valeurs calculées
+locals {
+  # Évite de répéter cette construction partout
+  name_prefix = "${var.project}-${var.environment}"
+
+  # Tags communs dérivés des variables
+  common_tags = {
+    Project     = var.project
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+    CreatedAt   = timestamp()
+  }
+}
+
+# Utilisation
+resource "aws_s3_bucket" "data" {
+  bucket = "${local.name_prefix}-data"
+  tags   = local.common_tags
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "${local.name_prefix}-logs"
+  tags   = local.common_tags
 }
 ```
 
