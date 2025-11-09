@@ -43,7 +43,11 @@ jobs:
             texlive-plain-generic \
             texlive-latex-extra \
             librsvg2-bin \
-            fonts-noto-color-emoji
+            fonts-noto-color-emoji \
+            fontconfig
+
+          # Refresh font cache to ensure Noto Color Emoji is available
+          fc-cache -fv
 
       - name: Install dependencies
         run: npm install

@@ -110,28 +110,28 @@ cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
 \usepackage{newunicodechar}
 
-% Try various emoji fonts in order of preference
-\IfFontExistsTF{Noto Color Emoji}{
-  \newfontfamily\emojifont{Noto Color Emoji}
-}{
-  \IfFontExistsTF{Apple Color Emoji}{
-    \newfontfamily\emojifont{Apple Color Emoji}
+% Set main font
+\setmainfont{Latin Modern Roman}
+
+% Try to set up emoji font, suppress errors if not found
+\makeatletter
+\@ifpackageloaded{fontspec}{
+  \IfFontExistsTF{Noto Color Emoji}{
+    \newfontfamily\emojifont[Renderer=HarfBuzz]{Noto Color Emoji}
   }{
-    \IfFontExistsTF{Segoe UI Emoji}{
-      \newfontfamily\emojifont{Segoe UI Emoji}
+    \IfFontExistsTF{Apple Color Emoji}{
+      \newfontfamily\emojifont{Apple Color Emoji}
     }{
-      % Fallback: try Twitter Color Emoji or Symbola
-      \IfFontExistsTF{Symbola}{
-        \newfontfamily\emojifont{Symbola}
+      \IfFontExistsTF{Segoe UI Emoji}{
+        \newfontfamily\emojifont{Segoe UI Emoji}
       }{
-        \newfontfamily\emojifont{DejaVu Sans}
+        % No emoji font available, define fallback that does nothing
+        \newfontfamily\emojifont{Latin Modern Roman}
       }
     }
   }
-}
-
-% Set main font
-\setmainfont{Latin Modern Roman}
+}{}
+\makeatother
 
 % Map common emojis to use emoji font
 \newunicodechar{💡}{{\emojifont 💡}}
