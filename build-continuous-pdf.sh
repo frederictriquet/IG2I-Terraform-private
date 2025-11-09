@@ -104,8 +104,8 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 # Change to temp directory so pandoc can find the images
 cd "$TEMP_DIR"
 
-# Create LaTeX header to support emojis
-# Use direct font file specification
+# Create LaTeX header - simpler approach without color emoji
+# Color emoji fonts don't work well with XeLaTeX, so we'll use Noto Emoji (B&W)
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
 \usepackage{newunicodechar}
@@ -113,30 +113,21 @@ cat > "header.tex" <<'EOF'
 % Set main font
 \setmainfont{Latin Modern Roman}
 
-% Define emoji font - use direct file path on Linux, system font on macOS
-% Try to load emoji font, catch errors gracefully
-\makeatletter
-\IfFileExists{/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf}{
-  % Linux: Use direct file path
-  \newfontfamily\emojifont{NotoColorEmoji}[
-    Path=/usr/share/fonts/truetype/noto/,
-    Extension=.ttf,
-    UprightFont=NotoColorEmoji
-  ]
+% For emoji support, try to use a font that has emoji glyphs
+% Noto Sans provides some emoji coverage, better than nothing
+\IfFontExistsTF{Noto Sans}{
+  \newfontfamily\emojifont{Noto Sans}
 }{
-  % macOS or other: try system fonts
-  \@ifpackageloaded{fontspec}{
-    \IfFontExistsTF{Apple Color Emoji}{
-      \newfontfamily\emojifont{Apple Color Emoji}
-    }{
-      % Fallback: just use regular font (emojis won't display)
-      \newfontfamily\emojifont{Latin Modern Roman}
-    }
-  }{}
+  \IfFontExistsTF{DejaVu Sans}{
+    \newfontfamily\emojifont{DejaVu Sans}
+  }{
+    % Fallback: emojis won't display, but document will still build
+    \newfontfamily\emojifont{Latin Modern Roman}
+  }
 }
-\makeatother
 
 % Map common emojis to use emoji font
+% Note: These will display as black & white symbols, not color emoji
 \newunicodechar{💡}{{\emojifont 💡}}
 \newunicodechar{✅}{{\emojifont ✅}}
 \newunicodechar{❌}{{\emojifont ❌}}
@@ -150,7 +141,7 @@ cat > "header.tex" <<'EOF'
 EOF
 
 # Generate PDF with pandoc
-# Using LaTeX engine for better formatting and emoji support
+# Using LaTeX engine for better formatting
 pandoc "cours-continuous.md" \
     -o "cours-continuous.pdf" \
     --pdf-engine=xelatex \

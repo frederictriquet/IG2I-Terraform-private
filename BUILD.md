@@ -12,14 +12,15 @@ This repository uses [Marp](https://marp.app/) to convert `cours.md` into presen
 - [Pandoc](https://pandoc.org/installing.html)
 - LaTeX (XeLaTeX) with additional packages
 - librsvg2 (for SVG conversion)
-- Emoji fonts (Noto Color Emoji recommended, Apple Color Emoji on macOS)
+- Noto fonts (for Unicode character support including emojis)
+
+**Note:** Color emoji rendering is not supported in XeLaTeX PDFs. Emojis will appear as black & white symbols if the font supports them.
 
 **Installation:**
 ```bash
 # macOS
 brew install pandoc librsvg
 brew install --cask mactex-no-gui
-# Apple Color Emoji is pre-installed on macOS
 
 # Ubuntu/Debian
 sudo apt-get install -y \
@@ -29,7 +30,7 @@ sudo apt-get install -y \
   texlive-latex-extra \
   texlive-plain-generic \
   librsvg2-bin \
-  fonts-noto-color-emoji
+  fonts-noto
 
 # RHEL/CentOS/Fedora
 sudo yum install -y \
@@ -38,7 +39,7 @@ sudo yum install -y \
   texlive-collection-fontsrecommended \
   texlive-collection-latexextra \
   librsvg2-tools \
-  google-noto-emoji-color-fonts
+  google-noto-sans-fonts
 ```
 
 ## Quick Start
