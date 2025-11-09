@@ -274,22 +274,6 @@ resource "aws_instance" "web" {
 
 ---
 
-## Workflow Terraform
-
-```
-Code Terraform (.tf)
-       ↓
-terraform init
-       ↓
-terraform plan
-       ↓
-terraform apply
-       ↓
-Ressources réelles
-```
-
----
-
 # 4. Terraform vs Ansible
 
 <!--
@@ -663,6 +647,10 @@ $ terraform apply  # Aucun changement
 
 ---
 
+# 6. Flux de travail Terraform
+
+---
+
 ## Commandes de base
 
 ```bash
@@ -677,14 +665,18 @@ terraform destroy   # Détruire
 
 ---
 
-# 6. Flux de travail Terraform
-
----
-
-## Le flux principal
+## Workflow Terraform
 
 ```
-Écrire → Init → Plan → Apply → Destroy
+Code Terraform (.tf)
+       ↓
+terraform init
+       ↓
+terraform plan
+       ↓
+terraform apply
+       ↓
+Ressources réelles
 ```
 
 ---
