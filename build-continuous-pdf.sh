@@ -105,10 +105,15 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 cd "$TEMP_DIR"
 
 # Create LaTeX header to support emojis
+# Try to use DejaVu Sans if available, otherwise fall back to default fonts
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
-\setmainfont{DejaVu Sans}
-\newfontfamily\DejaSans{DejaVu Sans}
+\IfFontExistsTF{DejaVu Sans}{
+  \setmainfont{DejaVu Sans}
+}{
+  % Fallback: use default font with Unicode support
+  \setmainfont{Latin Modern Roman}
+}
 EOF
 
 # Generate PDF with pandoc
