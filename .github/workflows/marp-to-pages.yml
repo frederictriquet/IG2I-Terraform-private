@@ -49,6 +49,12 @@ jobs:
           # Refresh font cache to ensure Noto Color Emoji is available
           fc-cache -fv
 
+          # Debug: List available emoji fonts
+          echo "=== Checking for emoji fonts ==="
+          fc-list | grep -i emoji || echo "No emoji fonts found via fc-list"
+          ls -la /usr/share/fonts/truetype/noto/ || echo "Noto directory not found"
+          find /usr/share/fonts -name "*emoji*" -o -name "*Emoji*" || echo "No emoji font files found"
+
       - name: Install dependencies
         run: npm install
 

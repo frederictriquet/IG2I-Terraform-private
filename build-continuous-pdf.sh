@@ -105,33 +105,37 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 cd "$TEMP_DIR"
 
 # Create LaTeX header to support emojis
-# Use font configuration with proper emoji support
+# Use emoji package which provides better emoji support
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
-\usepackage{newunicodechar}
 
 % Set main font
 \setmainfont{Latin Modern Roman}
 
-% Try to set up emoji font, suppress errors if not found
-\makeatletter
-\@ifpackageloaded{fontspec}{
-  \IfFontExistsTF{Noto Color Emoji}{
-    \newfontfamily\emojifont[Renderer=HarfBuzz]{Noto Color Emoji}
+% Try to find and use an emoji font
+% Use direct font file reference which works better than font name
+\IfFontExistsTF{Noto Color Emoji}{
+  \newfontfamily\emojifont{Noto Color Emoji}[
+    Extension=.ttf,
+    Path=/usr/share/fonts/truetype/noto/,
+    UprightFont=*
+  ]
+}{
+  \IfFontExistsTF{NotoColorEmoji}{
+    \newfontfamily\emojifont{NotoColorEmoji}
   }{
+    % macOS fallback
     \IfFontExistsTF{Apple Color Emoji}{
       \newfontfamily\emojifont{Apple Color Emoji}
     }{
-      \IfFontExistsTF{Segoe UI Emoji}{
-        \newfontfamily\emojifont{Segoe UI Emoji}
-      }{
-        % No emoji font available, define fallback that does nothing
-        \newfontfamily\emojifont{Latin Modern Roman}
-      }
+      % Last resort: use text font
+      \newfontfamily\emojifont{Latin Modern Roman}
     }
   }
-}{}
-\makeatother
+}
+
+% Alternative: use unicode-math for better Unicode support
+\usepackage{newunicodechar}
 
 % Map common emojis to use emoji font
 \newunicodechar{💡}{{\emojifont 💡}}
