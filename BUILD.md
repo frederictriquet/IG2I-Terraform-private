@@ -14,7 +14,7 @@ This repository uses [Marp](https://marp.app/) to convert `cours.md` into presen
 - librsvg2 (for SVG conversion)
 - Noto fonts (for Unicode character support including emojis)
 
-**Note:** Color emoji rendering is not supported in XeLaTeX PDFs. Emojis will appear as black & white symbols if the font supports them.
+**Note:** Emoji rendering is not reliably supported in XeLaTeX PDFs. Emojis are replaced with text equivalents (e.g., 💡 becomes [!]) to ensure consistent builds.
 
 **Installation:**
 ```bash

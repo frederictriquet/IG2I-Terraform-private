@@ -104,8 +104,8 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 # Change to temp directory so pandoc can find the images
 cd "$TEMP_DIR"
 
-# Create LaTeX header - simpler approach without color emoji
-# Color emoji fonts don't work well with XeLaTeX, so we'll use Noto Emoji (B&W)
+# Create LaTeX header - replace emojis with text
+# XeLaTeX doesn't support emoji fonts well, so we'll replace them with text equivalents
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
 \usepackage{newunicodechar}
@@ -113,31 +113,18 @@ cat > "header.tex" <<'EOF'
 % Set main font
 \setmainfont{Latin Modern Roman}
 
-% For emoji support, try to use a font that has emoji glyphs
-% Noto Sans provides some emoji coverage, better than nothing
-\IfFontExistsTF{Noto Sans}{
-  \newfontfamily\emojifont{Noto Sans}
-}{
-  \IfFontExistsTF{DejaVu Sans}{
-    \newfontfamily\emojifont{DejaVu Sans}
-  }{
-    % Fallback: emojis won't display, but document will still build
-    \newfontfamily\emojifont{Latin Modern Roman}
-  }
-}
-
-% Map common emojis to use emoji font
-% Note: These will display as black & white symbols, not color emoji
-\newunicodechar{💡}{{\emojifont 💡}}
-\newunicodechar{✅}{{\emojifont ✅}}
-\newunicodechar{❌}{{\emojifont ❌}}
-\newunicodechar{⚠}{{\emojifont ⚠}}
-\newunicodechar{🔧}{{\emojifont 🔧}}
-\newunicodechar{📝}{{\emojifont 📝}}
-\newunicodechar{🚀}{{\emojifont 🚀}}
-\newunicodechar{⚡}{{\emojifont ⚡}}
-\newunicodechar{🔒}{{\emojifont 🔒}}
-\newunicodechar{🌐}{{\emojifont 🌐}}
+% Replace emojis with text representations
+% This ensures the document always builds and content is readable
+\newunicodechar{💡}{[!]}
+\newunicodechar{✅}{[✓]}
+\newunicodechar{❌}{[✗]}
+\newunicodechar{⚠}{[!]}
+\newunicodechar{🔧}{[tool]}
+\newunicodechar{📝}{[note]}
+\newunicodechar{🚀}{[->]}
+\newunicodechar{⚡}{[!]}
+\newunicodechar{🔒}{[lock]}
+\newunicodechar{🌐}{[web]}
 EOF
 
 # Generate PDF with pandoc
