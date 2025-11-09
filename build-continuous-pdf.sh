@@ -105,7 +105,7 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 cd "$TEMP_DIR"
 
 # Create LaTeX header to support emojis
-# Use direct font file path for reliable emoji support
+# Use direct font file specification
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
 \usepackage{newunicodechar}
@@ -113,26 +113,28 @@ cat > "header.tex" <<'EOF'
 % Set main font
 \setmainfont{Latin Modern Roman}
 
-% Load emoji font with direct file path
-% On Linux (Ubuntu): NotoColorEmoji.ttf in /usr/share/fonts/truetype/noto/
-% On macOS: Apple Color Emoji (system font)
-\IfFontExistsTF{NotoColorEmoji}{
-  % Linux path - font name without spaces as registered by fc-cache
-  \newfontfamily\emojifont{NotoColorEmoji}
+% Define emoji font - use direct file path on Linux, system font on macOS
+% Try to load emoji font, catch errors gracefully
+\makeatletter
+\IfFileExists{/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf}{
+  % Linux: Use direct file path
+  \newfontfamily\emojifont{NotoColorEmoji}[
+    Path=/usr/share/fonts/truetype/noto/,
+    Extension=.ttf,
+    UprightFont=NotoColorEmoji
+  ]
 }{
-  \IfFontExistsTF{Noto Color Emoji}{
-    % Alternative name registration
-    \newfontfamily\emojifont{Noto Color Emoji}
-  }{
-    % macOS fallback
+  % macOS or other: try system fonts
+  \@ifpackageloaded{fontspec}{
     \IfFontExistsTF{Apple Color Emoji}{
       \newfontfamily\emojifont{Apple Color Emoji}
     }{
-      % Last resort: use text font (emojis won't render)
+      % Fallback: just use regular font (emojis won't display)
       \newfontfamily\emojifont{Latin Modern Roman}
     }
-  }
+  }{}
 }
+\makeatother
 
 % Map common emojis to use emoji font
 \newunicodechar{💡}{{\emojifont 💡}}
