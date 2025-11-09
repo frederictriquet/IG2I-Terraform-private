@@ -89,6 +89,11 @@ BEGIN {
         gsub(/\.svg/, ".png")
     }
 
+    # Remove ./ prefix from image paths for pandoc
+    if ($0 ~ /\!\[.*\]\(\.\// ) {
+        gsub(/\(\.\//, "(")
+    }
+
     # Print everything else
     print $0
 }
