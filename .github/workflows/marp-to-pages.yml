@@ -28,16 +28,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Build Marp presentation
-        uses: KoharaKazuya/marp-cli-action@v4
+      - name: Build HTML presentation
+        run: npx @marp-team/marp-cli cours.md -o cours.html
+
+      - name: Build slides PDF
+        run: npx @marp-team/marp-cli cours.md --pdf --allow-local-files -o cours-slides.pdf
+
+      - name: Build continuous PDF
+        run: |
+          chmod +x build-continuous-pdf.sh
+          ./build-continuous-pdf.sh
 
       - name: Prepare build directory
         run: |
           mkdir -p build
           mv cours.html build/index.html
+          mv cours-slides.pdf build/
+          mv cours-continuous.pdf build/
           touch build/.nojekyll
 
       - name: Upload artifact
