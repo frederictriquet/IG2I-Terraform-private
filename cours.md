@@ -171,7 +171,7 @@ Il permet de définir des ressources cloud et on-premise dans des fichiers de co
 - ❌ Connaissances dans la tête des gens
 - ❌ Pas de piste d'audit
 
----
+<!-- ---
 
 ## Solution Terraform
 
@@ -184,8 +184,8 @@ resource "aws_instance" "web" {
     Name = "WebServer"
   }
 }
-```
-
+``` -->
+<!-- 
 ---
 
 ## Avantages Terraform
@@ -195,7 +195,7 @@ resource "aws_instance" "web" {
 - ✅ Documenté dans le code
 - ✅ Scalable (1 ou 100 instances)
 - ✅ Outils qui analysent le code terraform
-
+ -->
 ---
 
 ## Approche 2 : Scripts shell
@@ -255,6 +255,11 @@ resource "aws_instance" "web" {
 - ✅ Gestion d'état : il sait ce qui existe
 - ✅ Idempotent : on peut l'exécuter plusieurs fois sans problème
 - ✅ Mises à jour et suppressions faciles
+- ✅ Versionné dans Git
+- ✅ Une commande : `terraform apply`
+- ✅ Documenté dans le code
+- ✅ Scalable (1 ou 100 instances)
+- ✅ Outils qui analysent le code terraform
 
 ---
 
@@ -686,9 +691,9 @@ terraform destroy   # Détruire
 
 ## terraform init
 
-Initialise un répertoire de travail, installe les providers et modules.
 
 ```bash
+# Initialise un répertoire de travail, installe les providers et modules.
 terraform init
 ```
 
@@ -700,9 +705,9 @@ terraform init
 
 ## terraform plan
 
-Crée un plan d'exécution.
 
 ```bash
+# Crée un plan d'exécution.
 terraform plan
 ```
 
@@ -714,7 +719,7 @@ terraform plan
 
 ---
 
-## Exemple de sortie plan
+## Exemple de sortie de plan
 
 ```
 Terraform will perform the following actions:
@@ -733,9 +738,9 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 
 ## terraform apply
 
-Applique les changements.
 
 ```bash
+# Applique les changements.
 terraform apply
 
 # Auto-approuver
@@ -749,9 +754,9 @@ terraform apply -var="instance_type=t2.small"
 
 ## terraform destroy
 
-Détruit toutes les ressources gérées.
 
 ```bash
+# Détruit toutes les ressources gérées.
 terraform destroy
 
 # Détruire une ressource spécifique
@@ -774,9 +779,9 @@ terraform fmt -recursive   # Récursif
 
 ## terraform validate
 
-Valider la syntaxe.
 
 ```bash
+# Valider la syntaxe.
 terraform validate
 ```
 
@@ -910,7 +915,7 @@ resource "aws_instance" "web" {
 
 ## Variables vs Locals : Quelle différence ?
 
-| Aspect | **Variables** (`var.*`) | **Locals** (`local.*`) |
+|  | **Variables** (`var.*`) | **Locals** (`local.*`) |
 |--------|-------------------------|------------------------|
 | **Nature** | Entrées configurables | Valeurs calculées internes |
 | **Source** | Fournies par l'utilisateur | Dérivées de variables/ressources |
@@ -1091,36 +1096,70 @@ resource "aws_instance" "web" {
 
 ## Remote State Data Source
 
-Utiliser dans un projet B des informations qui ont été créées dans le projet A.
-Les deux projets sont pourtant bien distincts.
+Partager des données entre projets Terraform distincts mais dépendants.
 
-**Exemples**
-- Projet A : création d'une base de données / Projets B,C,D... : différentes applications qui consomment la BDD
-- Projet A : création d'un keyvault / Projets B,C,D... : applications qui accèdent aux secrets stockés
+**Cas d'usage :**
+- Projet A : infrastructure réseau (VPC, subnets)
+- Projets B, C, D : applications qui utilisent ce réseau
+
 ---
 
-**Projet A :**
-```hcl
-output "vpc_id" {
-  value = aws_vpc.main.id
-}
-```
+## Exemple : Remote State avec S3
 
+**Projet A** (stocke son state dans S3)
 
-**Projet B :**
 ```hcl
-data "terraform_remote_state" "vpc" {
-  backend = "s3"
-  config = {
-    bucket = "my-terraform-state"
-    key    = "vpc/terraform.tfstate"
-    region = "us-east-1"
+# Configuration du backend S3 pour stocker le state
+terraform {
+  backend "s3" {
+    bucket = "mon-bucket-terraform-state"
+    key    = "network/terraform.tfstate"
+    region = "eu-west-3"
   }
 }
-# Utiliser
-resource "aws_instance" "web" {
-  subnet_id = data.terraform_remote_state.vpc.outputs.subnet_id
+
+# Création du VPC
+resource "aws_vpc" "main" { cidr_block = "10.0.0.0/16" ; tags = { Name = "vpc-principal" } }
+
+resource "aws_subnet" "public" {
+  vpc_id = aws_vpc.main.id ; cidr_block = "10.0.1.0/24" ; tags = { Name = "subnet-public" }
 }
+
+# Exporter les valeurs pour les autres projets
+output "vpc_id" { value = aws_vpc.main.id }
+
+output "subnet_id" { value = aws_subnet.public.id }
+```
+
+---
+
+**Projet B** (lit le state de A)
+
+```hcl
+# Lire le state du projet A depuis S3
+data "terraform_remote_state" "network" {
+  backend = "s3"
+  config = {
+    bucket = "mon-bucket-terraform-state"
+    key    = "network/terraform.tfstate"
+    region = "eu-west-3"
+  }
+}
+
+# Utiliser les outputs du projet A
+resource "aws_instance" "web" {
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+
+  # Utilisation du subnet_id exporté par le projet A
+  subnet_id = data.terraform_remote_state.network.outputs.subnet_id
+
+  tags = {
+    Name = "serveur-web"
+    VPC  = data.terraform_remote_state.network.outputs.vpc_id
+  }
+}
+
 ```
 
 ---
