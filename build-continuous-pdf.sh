@@ -85,12 +85,12 @@ BEGIN {
     }
 
     # Replace .svg with .png in image references if rsvg-convert was used
-    if ($0 ~ /\!\[.*\]\(.*\.svg\)/) {
+    if ($0 ~ /!\[.*\]\(.*\.svg\)/) {
         gsub(/\.svg/, ".png")
     }
 
     # Remove ./ prefix from image paths for pandoc
-    if ($0 ~ /\!\[.*\]\(\.\// ) {
+    if ($0 ~ /!\[.*\]\(\.\// ) {
         gsub(/\(\.\//, "(")
     }
 
