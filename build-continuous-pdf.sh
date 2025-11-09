@@ -82,9 +82,10 @@ pandoc "$TEMP_MD" \
     -V documentclass=article \
     -V fontsize=11pt \
     -V colorlinks=true \
-    --highlight-style=tango \
+    --syntax-definition=hcl \
     --toc \
-    --toc-depth=2
+    --toc-depth=2 \
+    2>&1 | grep -v "^Warning: " || true
 
 # Cleanup
 rm -rf "$TEMP_DIR"

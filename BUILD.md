@@ -10,19 +10,31 @@ This repository uses [Marp](https://marp.app/) to convert `cours.md` into presen
 
 ### For Continuous PDF (additional)
 - [Pandoc](https://pandoc.org/installing.html)
-- LaTeX (XeLaTeX)
+- LaTeX (XeLaTeX) with additional packages
+- librsvg2 (for SVG conversion)
 
 **Installation:**
 ```bash
 # macOS
-brew install pandoc
+brew install pandoc librsvg
 brew install --cask mactex-no-gui
 
 # Ubuntu/Debian
-sudo apt-get install pandoc texlive-xetex texlive-fonts-recommended
+sudo apt-get install -y \
+  pandoc \
+  texlive-xetex \
+  texlive-fonts-recommended \
+  texlive-latex-extra \
+  texlive-plain-generic \
+  librsvg2-bin
 
 # RHEL/CentOS/Fedora
-sudo yum install pandoc texlive-xetex texlive-collection-fontsrecommended
+sudo yum install -y \
+  pandoc \
+  texlive-xetex \
+  texlive-collection-fontsrecommended \
+  texlive-collection-latexextra \
+  librsvg2-tools
 ```
 
 ## Quick Start

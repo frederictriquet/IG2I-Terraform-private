@@ -33,10 +33,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install pandoc
+      - name: Install pandoc and LaTeX
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+          sudo apt-get install -y \
+            pandoc \
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-plain-generic \
+            texlive-latex-extra \
+            librsvg2-bin
 
       - name: Install dependencies
         run: npm install
