@@ -82,7 +82,6 @@ pandoc "$TEMP_MD" \
     -V documentclass=article \
     -V fontsize=11pt \
     -V colorlinks=true \
-    --syntax-definition=hcl \
     --toc \
     --toc-depth=2 \
     2>&1 | grep -v "^Warning: " || true
