@@ -104,11 +104,19 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 # Change to temp directory so pandoc can find the images
 cd "$TEMP_DIR"
 
+# Create LaTeX header to support emojis
+cat > "header.tex" <<'EOF'
+\usepackage{fontspec}
+\setmainfont{DejaVu Sans}
+\newfontfamily\DejaSans{DejaVu Sans}
+EOF
+
 # Generate PDF with pandoc
-# Using LaTeX engine for better formatting
+# Using LaTeX engine for better formatting and emoji support
 pandoc "cours-continuous.md" \
     -o "cours-continuous.pdf" \
     --pdf-engine=xelatex \
+    -H "header.tex" \
     -V geometry:margin=1in \
     -V documentclass=article \
     -V fontsize=11pt \

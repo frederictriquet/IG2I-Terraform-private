@@ -42,7 +42,8 @@ jobs:
             texlive-fonts-recommended \
             texlive-plain-generic \
             texlive-latex-extra \
-            librsvg2-bin
+            librsvg2-bin \
+            fonts-dejavu
 
       - name: Install dependencies
         run: npm install
