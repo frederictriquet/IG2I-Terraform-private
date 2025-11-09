@@ -31,12 +31,30 @@ TEMP_MD="$TEMP_DIR/cours-continuous.md"
 
 echo -e "${GREEN}Processing markdown...${NC}"
 
+# Convert SVG images to PNG if rsvg-convert is available
+if command -v rsvg-convert &> /dev/null; then
+    echo -e "${GREEN}Converting SVG images to PNG...${NC}"
+    mkdir -p "$TEMP_DIR/images"
+    for svg in images/*.svg; do
+        if [ -f "$svg" ]; then
+            png="${svg%.svg}.png"
+            rsvg-convert "$svg" -o "$TEMP_DIR/$png" 2>/dev/null || cp "$svg" "$TEMP_DIR/$svg"
+        fi
+    done
+else
+    echo -e "${YELLOW}Warning: rsvg-convert not found, copying images as-is${NC}"
+    if [ -d "images" ]; then
+        cp -r images "$TEMP_DIR/"
+    fi
+fi
+
 # Process the markdown file:
 # 1. Remove Marp front matter completely
 # 2. Remove all --- separators (slide breaks)
-# 3. Keep all content as flowing text
+# 3. Replace .svg extensions with .png in image paths
+# 4. Keep all content as flowing text
 
-awk '
+awk -v temp_dir="$TEMP_DIR" '
 BEGIN {
     in_frontmatter = 0
     frontmatter_done = 0
@@ -61,9 +79,14 @@ BEGIN {
         next  # Skip all front matter lines
     }
 
-    # After front matter, skip all --- separators but add page breaks for major sections
+    # After front matter, skip all --- separators
     if (frontmatter_done && $0 == "---") {
         next  # Skip slide breaks completely
+    }
+
+    # Replace .svg with .png in image references if rsvg-convert was used
+    if ($0 ~ /\!\[.*\]\(.*\.svg\)/) {
+        gsub(/\.svg/, ".png")
     }
 
     # Print everything else
@@ -73,10 +96,13 @@ BEGIN {
 
 echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 
+# Change to temp directory so pandoc can find the images
+cd "$TEMP_DIR"
+
 # Generate PDF with pandoc
 # Using LaTeX engine for better formatting
-pandoc "$TEMP_MD" \
-    -o cours-continuous.pdf \
+pandoc "cours-continuous.md" \
+    -o "cours-continuous.pdf" \
     --pdf-engine=xelatex \
     -V geometry:margin=1in \
     -V documentclass=article \
@@ -85,6 +111,10 @@ pandoc "$TEMP_MD" \
     --toc \
     --toc-depth=2 \
     2>&1 | grep -v "^Warning: " || true
+
+# Move the PDF back to the original directory
+mv "cours-continuous.pdf" "$OLDPWD/"
+cd "$OLDPWD"
 
 # Cleanup
 rm -rf "$TEMP_DIR"
