@@ -33,22 +33,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install pandoc and LaTeX
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            pandoc \
-            texlive-xetex \
-            texlive-fonts-recommended \
-            texlive-plain-generic \
-            texlive-latex-extra \
-            librsvg2-bin \
-            fonts-noto \
-            fontconfig
-
-          # Refresh font cache
-          fc-cache -fv
-
       - name: Install dependencies
         run: npm install
 
@@ -61,17 +45,11 @@ jobs:
       - name: Build slides PDF
         run: npx @marp-team/marp-cli cours.md --pdf --allow-local-files -o cours-slides.pdf
 
-      - name: Build continuous PDF
-        run: |
-          chmod +x build-continuous-pdf.sh
-          ./build-continuous-pdf.sh
-
       - name: Prepare build directory
         run: |
           mkdir -p build
           mv cours.html build/index.html
           mv cours-slides.pdf build/
-          mv cours-continuous.pdf build/
           touch build/.nojekyll
 
       - name: Upload artifact

@@ -54,7 +54,6 @@ config
 # Marp Build Outputs
 cours.html
 cours-slides.pdf
-cours-continuous.pdf
 build/
 
 # Node.js Dependencies

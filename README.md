@@ -4,9 +4,9 @@ This repository contains progressive exercises teaching Infrastructure as Code c
 
 ## Course Presentation
 
-- **Interactive Slides**: [Terraform Introduction Course](https://frederictriquet.github.io/IG2I-Terraform/)
-- **PDF with Slides**: [cours-slides.pdf](https://frederictriquet.github.io/IG2I-Terraform/cours-slides.pdf) - Presentation format (one slide per page)
-- **PDF Continuous**: [cours-continuous.pdf](https://frederictriquet.github.io/IG2I-Terraform/cours-continuous.pdf) - Document format (no slide breaks)
+View the course slides online: [Terraform Introduction Course](https://frederictriquet.github.io/IG2I-Terraform/)
+
+PDF version: [cours-slides.pdf](https://frederictriquet.github.io/IG2I-Terraform/cours-slides.pdf)
 
 ## Repository Structure
 

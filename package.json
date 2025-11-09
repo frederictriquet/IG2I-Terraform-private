@@ -7,8 +7,7 @@
     "build:watch": "marp cours.md -o cours.html --watch",
     "build:dir": "mkdir -p build && marp cours.md -o build/index.html && touch build/.nojekyll",
     "build:pdf": "marp cours.md --pdf --allow-local-files -o cours-slides.pdf",
-    "build:continuous": "./build-continuous-pdf.sh",
-    "build:all": "npm run build && npm run build:pdf && npm run build:continuous",
+    "build:all": "npm run build && npm run build:pdf",
     "preview": "marp cours.md -o cours.html --preview",
     "serve": "marp cours.md -s"
   },
