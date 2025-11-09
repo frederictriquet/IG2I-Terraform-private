@@ -12,14 +12,14 @@ This repository uses [Marp](https://marp.app/) to convert `cours.md` into presen
 - [Pandoc](https://pandoc.org/installing.html)
 - LaTeX (XeLaTeX) with additional packages
 - librsvg2 (for SVG conversion)
-- DejaVu fonts (for emoji support)
+- Emoji fonts (Noto Color Emoji recommended, Apple Color Emoji on macOS)
 
 **Installation:**
 ```bash
 # macOS
 brew install pandoc librsvg
 brew install --cask mactex-no-gui
-# DejaVu fonts usually pre-installed on macOS
+# Apple Color Emoji is pre-installed on macOS
 
 # Ubuntu/Debian
 sudo apt-get install -y \
@@ -29,7 +29,7 @@ sudo apt-get install -y \
   texlive-latex-extra \
   texlive-plain-generic \
   librsvg2-bin \
-  fonts-dejavu
+  fonts-noto-color-emoji
 
 # RHEL/CentOS/Fedora
 sudo yum install -y \
@@ -38,7 +38,7 @@ sudo yum install -y \
   texlive-collection-fontsrecommended \
   texlive-collection-latexextra \
   librsvg2-tools \
-  dejavu-sans-fonts
+  google-noto-emoji-color-fonts
 ```
 
 ## Quick Start

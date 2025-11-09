@@ -43,7 +43,7 @@ jobs:
             texlive-plain-generic \
             texlive-latex-extra \
             librsvg2-bin \
-            fonts-dejavu
+            fonts-noto-color-emoji
 
       - name: Install dependencies
         run: npm install

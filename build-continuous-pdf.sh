@@ -105,15 +105,45 @@ echo -e "${GREEN}Generating continuous PDF with pandoc...${NC}"
 cd "$TEMP_DIR"
 
 # Create LaTeX header to support emojis
-# Try to use DejaVu Sans if available, otherwise fall back to default fonts
+# Use font configuration with proper emoji support
 cat > "header.tex" <<'EOF'
 \usepackage{fontspec}
-\IfFontExistsTF{DejaVu Sans}{
-  \setmainfont{DejaVu Sans}
+\usepackage{newunicodechar}
+
+% Try various emoji fonts in order of preference
+\IfFontExistsTF{Noto Color Emoji}{
+  \newfontfamily\emojifont{Noto Color Emoji}
 }{
-  % Fallback: use default font with Unicode support
-  \setmainfont{Latin Modern Roman}
+  \IfFontExistsTF{Apple Color Emoji}{
+    \newfontfamily\emojifont{Apple Color Emoji}
+  }{
+    \IfFontExistsTF{Segoe UI Emoji}{
+      \newfontfamily\emojifont{Segoe UI Emoji}
+    }{
+      % Fallback: try Twitter Color Emoji or Symbola
+      \IfFontExistsTF{Symbola}{
+        \newfontfamily\emojifont{Symbola}
+      }{
+        \newfontfamily\emojifont{DejaVu Sans}
+      }
+    }
+  }
 }
+
+% Set main font
+\setmainfont{Latin Modern Roman}
+
+% Map common emojis to use emoji font
+\newunicodechar{💡}{{\emojifont 💡}}
+\newunicodechar{✅}{{\emojifont ✅}}
+\newunicodechar{❌}{{\emojifont ❌}}
+\newunicodechar{⚠}{{\emojifont ⚠}}
+\newunicodechar{🔧}{{\emojifont 🔧}}
+\newunicodechar{📝}{{\emojifont 📝}}
+\newunicodechar{🚀}{{\emojifont 🚀}}
+\newunicodechar{⚡}{{\emojifont ⚡}}
+\newunicodechar{🔒}{{\emojifont 🔒}}
+\newunicodechar{🌐}{{\emojifont 🌐}}
 EOF
 
 # Generate PDF with pandoc
