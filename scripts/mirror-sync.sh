@@ -70,8 +70,6 @@ EXCLUDE_FILE="${WORK_DIR}/exclude-patterns.txt"
 # Start with common excludes
 cat > "${EXCLUDE_FILE}" << 'EOF'
 .git/
-.github/workflows/
-scripts/mirror-sync.sh
 EOF
 
 # Add patterns from .gitignore

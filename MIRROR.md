@@ -7,6 +7,8 @@ Ce système permet de synchroniser automatiquement ce dépôt (avec corrections)
 Le système de mirroring permet de :
 - **Exclure les corrections** des exercices (répertoires `solution/`)
 - **Exclure les fichiers de développement** (build artifacts, node_modules, etc.)
+- **Exclure la documentation interne** (Specs/, TODO.md, QCM.md)
+- **Inclure les workflows nécessaires** (marp-to-pages pour la publication du cours)
 - **Synchroniser automatiquement** à chaque push sur `master`
 - **Maintenir l'historique** avec des commits traçables
 
@@ -49,9 +51,20 @@ Fichier de configuration définissant les exclusions spécifiques au mirroring.
 exercise-*/solution/
 **/solution/
 
-# Fichiers de développement
+# Mirror management
+.github/workflows/mirror-sync.yml
+.github/SECRETS.example.md
+scripts/mirror-sync.sh
+scripts/test-mirror.sh
 mirror.md
+MIRROR.md
 .mirrorignore
+
+# Internal documentation
+TODO.md
+QCM.md
+Specs/
+.claude/
 ```
 
 ### 2. `scripts/mirror-sync.sh`

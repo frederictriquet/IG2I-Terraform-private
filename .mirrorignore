@@ -12,7 +12,19 @@ build/
 cours.html
 cours-slides.pdf
 
-# Mirror management files
+# Mirror management files and documentation
 mirror.md
 MIRROR.md
 .mirrorignore
+.github/workflows/mirror-sync.yml
+.github/SECRETS.example.md
+scripts/mirror-sync.sh
+scripts/test-mirror.sh
+
+# Internal documentation and notes
+TODO.md
+QCM.md
+Specs/
+
+# Claude Code configuration
+.claude/

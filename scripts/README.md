@@ -48,7 +48,7 @@ MIRROR_BRANCH="master" \
 **What it does**:
 1. Clones the mirror repository
 2. Reads exclusion patterns from `.gitignore` and `.mirrorignore`
-3. Syncs files using `rsync` with exclusions applied
+3. Syncs files using `rsync` with exclusions applied (includes marp-to-pages workflow)
 4. Commits and pushes changes to the mirror
 
 **Automated Execution**:

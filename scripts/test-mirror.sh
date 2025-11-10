@@ -24,8 +24,6 @@ EXCLUDE_FILE="/tmp/mirror-exclude-$$"
 
 cat > "${EXCLUDE_FILE}" << 'EOF'
 .git/
-.github/workflows/
-scripts/mirror-sync.sh
 EOF
 
 # Add patterns from .gitignore
