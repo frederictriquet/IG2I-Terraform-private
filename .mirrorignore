@@ -18,9 +18,7 @@ MIRROR.md
 .mirrorignore
 .github/workflows/mirror-sync.yml
 .github/SECRETS.example.md
-scripts/mirror-sync.sh
-scripts/test-mirror.sh
-scripts/build-marp.sh
+scripts/
 
 # Internal documentation and notes
 TODO.md
@@ -29,3 +27,5 @@ Specs/
 
 # Claude Code configuration
 .claude/
+CLAUDE.md
+BUILD.md

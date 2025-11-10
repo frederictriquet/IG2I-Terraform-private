@@ -63,3 +63,5 @@ package-lock.json
 # Mirror SSH keys (should never be committed)
 mirror_key
 mirror_key.pub
+
+.venv
