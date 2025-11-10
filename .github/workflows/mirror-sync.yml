@@ -1,0 +1,56 @@
+name: Mirror Sync to Student Repository
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/workflows/mirror-sync.yml'
+      - 'mirror.md'
+      - '.mirrorignore'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: github.repository != 'PLACEHOLDER/terraform-training-students'  # Prevent infinite loop if run in mirror repo
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better commit messages
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Mirror Bot"
+          git config --global user.email "mirror-bot@noreply.github.com"
+
+      - name: Setup SSH key for mirror repository
+        env:
+          MIRROR_SSH_KEY: ${{ secrets.MIRROR_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Run mirror sync script
+        env:
+          MIRROR_REPO_URL: ${{ secrets.MIRROR_REPO_URL }}
+          MIRROR_BRANCH: ${{ secrets.MIRROR_BRANCH || 'master' }}
+        run: |
+          bash scripts/mirror-sync.sh
+
+      - name: Report sync status
+        if: success()
+        run: |
+          echo "✅ Mirror synchronization completed successfully"
+          echo "Mirror repository has been updated with latest changes (excluding solutions)"
+
+      - name: Report sync failure
+        if: failure()
+        run: |
+          echo "❌ Mirror synchronization failed"
+          echo "Check the logs above for details"
+          exit 1

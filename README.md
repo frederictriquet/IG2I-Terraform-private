@@ -65,6 +65,16 @@ terraform destroy   # Destroy all resources
 - S3 bucket names must be globally unique across all AWS accounts
 - Always use the random provider for generating unique suffixes
 
+## Repository Mirroring
+
+This repository uses an automated mirroring system to maintain a student-facing version without exercise solutions.
+
+- **Source repository** (this one): Contains complete exercises with solutions
+- **Mirror repository**: Contains exercises without solutions for students
+- **Automatic sync**: Runs on every push to `master` via GitHub Actions
+
+For configuration details, see [MIRROR.md](MIRROR.md).
+
 ## Documentation
 
 - [Terraform Documentation](https://terraform.io/docs)

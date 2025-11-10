@@ -1,0 +1,18 @@
+# Mirror Ignore File
+# Files and directories matching these patterns will NOT be synced to the mirror repository
+# Syntax is the same as .gitignore
+
+# Exercise solutions - do not share with students
+exercise-*/solution/
+**/solution/
+
+# Development and build artifacts (redundant with .gitignore, but explicit)
+node_modules/
+build/
+cours.html
+cours-slides.pdf
+
+# Mirror management files
+mirror.md
+MIRROR.md
+.mirrorignore

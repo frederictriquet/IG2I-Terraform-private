@@ -27,6 +27,26 @@ exercise-XX/
 
 - `Specs/` - Contains detailed exercise specifications in French (full instructions)
 - `cours.md` - Marp presentation slides covering Terraform fundamentals (in French)
+- `scripts/` - Automation scripts (mirror sync)
+
+## Repository Mirroring
+
+This repository uses an automated mirroring system to maintain two versions:
+
+1. **Source repository** (this one): Complete exercises with solutions - for instructors
+2. **Mirror repository**: Exercises without solutions - for students
+
+Key files:
+- `.mirrorignore` - Patterns for files to exclude from mirroring (solutions, internal docs)
+- `scripts/mirror-sync.sh` - Bash script that performs the synchronization
+- `.github/workflows/mirror-sync.yml` - GitHub Actions workflow (runs on push to master)
+
+**IMPORTANT**: When creating new exercises or modifying the structure:
+- Solutions MUST be in `solution/` directories (automatically excluded from mirror)
+- Do not commit sensitive information (credentials, internal notes) outside of `.mirrorignore` patterns
+- Test mirroring locally before pushing: `MIRROR_REPO_URL=<url> ./scripts/mirror-sync.sh`
+
+See [MIRROR.md](MIRROR.md) for complete documentation.
 
 ## Exercise Progression
 

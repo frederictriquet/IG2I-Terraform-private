@@ -191,4 +191,3 @@ source ~/.bashrc
 - **Documentation officielle** : https://developer.hashicorp.com/terraform/docs
 - **Terraform Registry** : https://registry.terraform.io/
 - **VS Code Terraform Extension** : https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform
-- **Cheat Sheet Terraform** : https://developer.hashicorp.com/terraform/docs/cli/commands
