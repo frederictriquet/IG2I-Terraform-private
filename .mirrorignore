@@ -20,6 +20,7 @@ MIRROR.md
 .github/SECRETS.example.md
 scripts/mirror-sync.sh
 scripts/test-mirror.sh
+scripts/build-marp.sh
 
 # Internal documentation and notes
 TODO.md

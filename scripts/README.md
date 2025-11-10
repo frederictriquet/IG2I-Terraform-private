@@ -4,6 +4,48 @@ This directory contains automation scripts for the repository.
 
 ## Available Scripts
 
+### build-marp.sh
+
+Builds Marp presentations from cours.md with various options.
+
+**Purpose**: Convert cours.md to HTML/PDF presentations locally.
+
+**Usage**:
+```bash
+# Build HTML presentation
+./scripts/build-marp.sh
+
+# Watch for changes and rebuild
+./scripts/build-marp.sh --watch
+
+# Start local server with live reload
+./scripts/build-marp.sh --serve
+
+# Preview in browser
+./scripts/build-marp.sh --preview
+
+# Build to build/ directory (like CI)
+./scripts/build-marp.sh --dir
+
+# Show help
+./scripts/build-marp.sh --help
+```
+
+**What it does**:
+- Checks for npx availability
+- Installs @marp-team/marp-cli if needed
+- Converts cours.md to cours.html (or other formats)
+- Supports watch, serve, and preview modes
+
+**When to use**:
+- Quick local builds without npm
+- Testing presentation changes
+- Offline development
+
+**Note**: For most use cases, prefer `npm run build` commands documented in [BUILD.md](../BUILD.md).
+
+---
+
 ### test-mirror.sh
 
 Tests the mirror synchronization in dry-run mode without actually syncing.
