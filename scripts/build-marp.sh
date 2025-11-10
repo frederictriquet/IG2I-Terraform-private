@@ -42,7 +42,7 @@ for arg in "$@"; do
             BUILD_DIR=true
             ;;
         --help|-h)
-            echo "Usage: ./build.sh [options]"
+            echo "Usage: ./scripts/build-marp.sh [options]"
             echo ""
             echo "Options:"
             echo "  --watch    Watch for changes and rebuild automatically"
