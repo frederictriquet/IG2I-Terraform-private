@@ -69,14 +69,14 @@ IG2I - 2025 - Frédéric Triquet
 
 ## Qu'est-ce que l'IaC ?
 
-L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnement de l'infrastructure via des fichiers de définition lisibles par la machine.
+L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnement de l'infrastructure via des fichiers lisibles par la machine.
 
 <!--
 du code = des fichiers suffisamment simples pour être lus et écrits par l'Homme / suffisamment structurés pour être compris par la machine -->
 
 
 
-## Avantages clés de l'IaC
+### Avantages clés de l'IaC
 
 - **"gitable"**
   - Contrôle de version pour suivre les modifications
@@ -350,13 +350,24 @@ output "instance_ip" {
 .columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 0rem;
 }
 </style>
 
 ## Quand utiliser quoi ?
 
 <div class="columns">
+<div>
+
+### Quand utiliser Terraform ?
+
+- Création d'infrastructure cloud
+- Gestion du cycle de vie (créer, modifier, détruire) de ressources cloud
+- Modules d'infrastructure réutilisables
+
+➡️ De quelle infrastructure ai-je besoin ?
+
+</div>
 <div>
 
 ### Quand utiliser Ansible ?
@@ -367,18 +378,7 @@ output "instance_ip" {
 - Gestion de fichiers de configuration
 - Orchestration multi-étapes
 
-➡️ "Comment configurer ces serveurs ?"
-
-</div>
-<div>
-
-### Quand utiliser Terraform ?
-
-- Création d'infrastructure cloud
-- Gestion du cycle de vie (créer, modifier, détruire) de ressources cloud
-- Modules d'infrastructure réutilisables
-
-➡️ "De quelle infrastructure ai-je besoin ?"
+➡️ Comment configurer ces serveurs ?
 
 </div>
 </div>
@@ -681,7 +681,7 @@ $ terraform apply  # Aucun changement
 
 ## Commandes de base
 
-```bash
+```
 terraform init      # Initialiser
 terraform fmt       # Formater
 terraform validate  # Valider
@@ -745,7 +745,7 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 
 ---
 
-## terraform apply
+### terraform apply
 
 Applique les changements.
 
@@ -757,7 +757,7 @@ terraform apply -auto-approve
 terraform apply -var="instance_type=t2.small"
 ```
 
-## terraform destroy
+### terraform destroy
 
 Détruit toutes les ressources gérées.
 
@@ -922,13 +922,24 @@ resource "aws_instance" "web" {
 | **Modification** | Peut changer entre exécutions | Calculée à chaque exécution |
 | **Usage** | Paramètres d'entrée | Éviter la répétition de calculs |
 
-**Règle d'or :**
+
 - Utilisez **variables** pour ce qui vient de l'extérieur
 - Utilisez **locals** pour ce qui est calculé/transformé en interne
 
 ---
 
+<style scoped>
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+</style>
+
 ## Exemple : Variables vs Locals
+
+<div class="columns">
+<div>
 
 ```hcl
 # Variables : entrées utilisateur
@@ -953,7 +964,11 @@ locals {
     CreatedAt   = timestamp()
   }
 }
+```
+</div>
+<div>
 
+```hcl
 # Utilisation
 resource "aws_s3_bucket" "data" {
   bucket = "${local.name_prefix}-data"
@@ -965,6 +980,8 @@ resource "aws_s3_bucket" "logs" {
   tags   = local.common_tags
 }
 ```
+</div>
+</div>
 
 ---
 
