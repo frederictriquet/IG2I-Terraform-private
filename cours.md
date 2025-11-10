@@ -346,7 +346,20 @@ output "instance_ip" {
 
 ---
 
-## Quand utiliser Ansible ?
+<style scoped>
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+</style>
+
+## Quand utiliser quoi ?
+
+<div class="columns">
+<div>
+
+### Quand utiliser Ansible ?
 
 - Configuration de logiciels sur serveurs existants
 - Déploiement d'applications
@@ -356,15 +369,19 @@ output "instance_ip" {
 
 ➡️ "Comment configurer ces serveurs ?"
 
----
+</div>
+<div>
 
-## Quand utiliser Terraform ?
+### Quand utiliser Terraform ?
 
 - Création d'infrastructure cloud
 - Gestion du cycle de vie (créer, modifier, détruire) de ressources cloud
 - Modules d'infrastructure réutilisables
 
 ➡️ "De quelle infrastructure ai-je besoin ?"
+
+</div>
+</div>
 
 ---
 
@@ -557,8 +574,6 @@ output "instance_id" {
 }
 ```
 
----
-
 ## Utilisation des outputs
 
 ```bash
@@ -695,14 +710,7 @@ Ressources réelles
 ---
 
 ## terraform init
-
-
-```bash
-# Initialise un répertoire de travail, installe les providers et modules.
-terraform init
-```
-
-**Quand l'exécuter :**
+- Initialise un répertoire de travail, installe les providers et modules.
 - Première fois dans un projet
 - Après l'ajout de providers/modules
 
@@ -710,11 +718,7 @@ terraform init
 
 ## terraform plan
 
-
-```bash
-# Crée un plan d'exécution.
-terraform plan
-```
+Crée un plan d'exécution.
 
 **Symboles :**
 - `+` : Ressource créée
@@ -743,11 +747,9 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 
 ## terraform apply
 
+Applique les changements.
 
 ```bash
-# Applique les changements.
-terraform apply
-
 # Auto-approuver
 terraform apply -auto-approve
 
@@ -755,22 +757,20 @@ terraform apply -auto-approve
 terraform apply -var="instance_type=t2.small"
 ```
 
----
-
 ## terraform destroy
 
+Détruit toutes les ressources gérées.
 
 ```bash
-# Détruit toutes les ressources gérées.
-terraform destroy
-
 # Détruire une ressource spécifique
 terraform destroy -target=aws_instance.web
 ```
 
 ---
 
-## terraform fmt
+## Commandes utilitaires
+
+### terraform fmt
 
 Formater le code.
 
@@ -780,15 +780,10 @@ terraform fmt -check       # Vérifier
 terraform fmt -recursive   # Récursif
 ```
 
----
+### terraform validate
 
-## terraform validate
+Valider la syntaxe.
 
-
-```bash
-# Valider la syntaxe.
-terraform validate
-```
 
 ---
 
