@@ -24,25 +24,38 @@ section::after {
 
 # Cours d'introduction à Terraform
 
-Formation Infrastructure as Code avec Terraform
+IG2I - 2025 - Frédéric Triquet
 
 ---
 
+<style scoped>
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+</style>
+
 ## Table des matières
+
+<div class="columns">
+<div>
 
 1. Introduction à l'Infrastructure en tant que Code
 2. Qu'est-ce que Terraform ?
 3. Approches traditionnelles vs Terraform
 4. Terraform vs Ansible
+
+</div>
+<div>
+
 5. Concepts fondamentaux
-
----
-
-## Table des matières (suite)
-
 6. Flux de travail Terraform
 7. Concepts avancés
 8. Outils alternatifs
+
+</div>
+</div>
 
 ## Déroulement de la journée
 
@@ -61,7 +74,7 @@ L'Infrastructure en tant que Code est la pratique de gestion et d'approvisionnem
 <!--
 du code = des fichiers suffisamment simples pour être lus et écrits par l'Homme / suffisamment structurés pour être compris par la machine -->
 
----
+
 
 ## Avantages clés de l'IaC
 
