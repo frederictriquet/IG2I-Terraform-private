@@ -83,3 +83,30 @@ Voici une **liste complète (et à jour)** d’outils permettant d’auditer du 
 ---
 
 Souhaites-tu que je te prépare une **comparaison synthétique (tableau)** entre ces outils — par exemple avec critères *sécurité / conformité / coût / intégration CI/CD* ?
+
+
+
+
+mettre une ressource random et une ressource qui utlise la donnée random
+Le provider Random sert à générer des données aléatoires différentes
+- à chaque terraform plan
+- à chaque terraform apply
+- à chaque fois que la ressource est créée
+- à chaque fois que la ressource est modifiée
+
+mettre l'output d'un terraform plan avec des ajouts, suppressions et mises à jour
+Demander ce que ça fait
+
+
+
+https://awsacademy.instructure.com/courses/134053
+modules
+
+Launch AWS Academy Learner Lab 
+
+
+dans EC2, keypairs -> c'est la vockey (la clé publique de ce que j'ai mis dans mon .ssh
+)
+
+dans une instance :
+Actions - security - modify IAM role -> LabInstanceProfile
