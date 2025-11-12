@@ -1,0 +1,266 @@
+// QCM - Terraform - IG2I
+// Format: GIFT (Moodle Import)
+// Questions pour évaluer la compréhension du cours et des travaux pratiques
+
+// ============================================================
+// QUESTIONS THÉORIQUES (1-10)
+// ============================================================
+
+$CATEGORY: Terraform IG2I/Concepts Théoriques
+
+::Concept IaC::Qu'est-ce que l'Infrastructure as Code (IaC) ?{
+~Un langage de programmation pour créer des sites web
+=Une méthode pour gérer et provisionner l'infrastructure via des fichiers de définition
+~Un système d'exploitation pour serveurs cloud
+~Un outil de monitoring d'infrastructure
+}
+
+::État Terraform::Quel est le rôle du fichier \`terraform.tfstate\` ?{
+~Stocker les variables de configuration
+~Contenir la documentation du projet
+=Suivre l'état actuel de l'infrastructure gérée par Terraform
+~Définir les ressources à créer
+}
+
+::Workflow Terraform::Quelle est la séquence correcte des commandes Terraform pour déployer une nouvelle infrastructure ?{
+~\`terraform apply\` → \`terraform init\` → \`terraform plan\`
+=\`terraform init\` → \`terraform plan\` → \`terraform apply\`
+~\`terraform plan\` → \`terraform init\` → \`terraform apply\`
+~\`terraform validate\` → \`terraform apply\` → \`terraform init\`
+}
+
+::Providers::Quel est le rôle d'un provider Terraform ?{
+~Gérer les variables d'environnement
+=Fournir l'interface pour interagir avec les APIs de services (AWS, Azure, etc.)
+~Compiler le code Terraform en binaire
+~Créer des backups de l'infrastructure
+}
+
+::Différence Ansible vs Terraform::Quelle affirmation est correcte concernant Ansible et Terraform ?{
+~Ansible est idéal pour provisionner l'infrastructure cloud, Terraform pour configurer les logiciels
+=Terraform est idéal pour provisionner l'infrastructure cloud, Ansible pour configurer les logiciels
+~Ansible et Terraform font exactement la même chose
+~Terraform ne peut pas être utilisé avec le cloud
+}
+
+::Variables vs Locals::Quelle est la différence principale entre \`variables\` et \`locals\` en Terraform ?{
+=Les variables sont pour les valeurs externes configurables, les locals pour les valeurs calculées internes
+~Les variables sont obsolètes, il faut toujours utiliser locals
+~Les locals sont pour les valeurs externes, les variables pour les valeurs internes
+~Il n'y a aucune différence, ce sont des synonymes
+}
+
+::Idempotence::Que signifie l'idempotence dans le contexte de Terraform ?{
+~Terraform détruit toujours toute l'infrastructure avant de la recréer
+=Terraform applique les changements uniquement si nécessaire pour atteindre l'état désiré
+~Terraform ne peut être exécuté qu'une seule fois
+~Terraform crée toujours de nouvelles ressources à chaque exécution
+}
+
+::Random Provider::Pourquoi utilise-t-on le provider \`random\` dans les exercices ?{
+~Pour chiffrer les données sensibles
+=Pour générer des suffixes uniques et garantir l'unicité des noms de ressources
+~Pour créer des mots de passe aléatoires pour les utilisateurs
+~Pour simuler des pannes aléatoires
+}
+
+::Fichier terraform.tfvars::Pourquoi le fichier \`terraform.tfvars\` ne doit-il PAS être commité dans Git ?{
+~Parce qu'il est trop volumineux
+=Parce qu'il contient souvent des valeurs sensibles (credentials, secrets)
+~Parce qu'il est généré automatiquement
+~Parce que Terraform l'interdit
+}
+
+::Commande terraform plan::Que fait la commande \`terraform plan\` ?{
+~Elle applique immédiatement les modifications à l'infrastructure
+=Elle affiche un aperçu des modifications qui seront appliquées sans les exécuter
+~Elle détruit l'infrastructure existante
+~Elle crée un backup de l'état actuel
+}
+
+// ============================================================
+// QUESTIONS PRATIQUES DE BASE (11-20) - Exercices 01-04
+// ============================================================
+
+$CATEGORY: Terraform IG2I/Pratique - Exercices de Base
+
+::Random Provider::Dans l'exercice 01, quel type de ressource \`random\` avez-vous utilisé pour générer un suffixe unique ?{
+~\`random_string\`
+=\`random_id\`
+~\`random_password\`
+~\`random_uuid\`
+}
+
+::État sans cloud::Quel est l'avantage principal d'utiliser le provider \`random\` dans l'exercice 01 ?{
+~Il est gratuit
+=Il permet de comprendre le concept d'état Terraform sans avoir besoin de credentials cloud
+~Il est plus rapide que les autres providers
+~Il ne crée pas de fichier .tfstate
+}
+
+::Bucket S3::Dans l'exercice 02, pourquoi les noms de buckets S3 doivent-ils être globalement uniques ?{
+~C'est une limitation technique de Terraform
+~Pour des raisons de sécurité AWS
+=Les buckets S3 sont accessibles via des URL DNS qui doivent être uniques dans le monde entier
+~Pour faciliter la facturation
+}
+
+::Référence de ressource::Comment référencer le suffixe hexadécimal d'une ressource \`random_id\` nommée \`bucket_suffix\` ?{
+~\`random_id.bucket_suffix.value\`
+=\`random_id.bucket_suffix.hex\`
+~\`$\{bucket_suffix.hex\}\`
+~\`random_id.bucket_suffix.id\`
+}
+
+::Organisation des fichiers::Dans l'exercice 03, quelle est l'organisation correcte des fichiers Terraform ?{
+~Tout dans un seul fichier \`main.tf\`
+=\`main.tf\`, \`variables.tf\`, \`outputs.tf\` séparés
+~Un fichier par ressource
+~Uniquement \`variables.tf\` et \`outputs.tf\`
+}
+
+::Déclaration de variable::Quelle syntaxe est correcte pour déclarer une variable avec une valeur par défaut ?{
+~\`var bucket_prefix \= "my-bucket"\`
+=\`variable "bucket_prefix" \{ default \= "my-bucket" \}\`
+~\`variable bucket_prefix default "my-bucket"\`
+~\`default variable "bucket_prefix" \= "my-bucket"\`
+}
+
+::Outputs::Quel est le but principal des \`outputs\` dans Terraform ?{
+=Afficher des valeurs importantes après l'exécution (IDs, URLs, etc.)
+~Exporter l'infrastructure vers un autre outil
+~Sauvegarder l'état dans un fichier
+~Valider la syntaxe du code
+}
+
+::Locals::Dans l'exercice 04, quelle est la syntaxe correcte pour référencer une valeur \`local\` nommée \`bucket_name\` ?{
+~\`var.bucket_name\`
+~\`locals.bucket_name\`
+=\`local.bucket_name\`
+~\`$\{bucket_name\}\`
+}
+
+::Merge de tags::Quelle fonction Terraform permet de fusionner plusieurs maps de tags ?{
+~\`concat()\`
+=\`merge()\`
+~\`join()\`
+~\`combine()\`
+}
+
+::Utilisation des locals::Dans quel cas devriez-vous utiliser un \`local\` plutôt qu'une \`variable\` ?{
+~Pour des valeurs qui viennent de l'extérieur
+=Pour des valeurs calculées à partir d'autres valeurs (variables ou ressources)
+~Pour des valeurs secrètes
+~Pour des valeurs qui changent à chaque exécution
+}
+
+// ============================================================
+// QUESTIONS AVANCÉES (21-35) - Exercices 05-07
+// ============================================================
+
+$CATEGORY: Terraform IG2I/Pratique - Concepts Avancés
+
+::Outputs sensibles::Pourquoi marquer un output comme \`sensitive \= true\` ?{
+=Pour le cacher dans les logs et l'output de terraform apply
+~Pour chiffrer la valeur dans le fichier state
+~Pour empêcher l'output d'être lu par d'autres modules
+~Pour forcer une validation de la valeur
+}
+
+::Data sources::Quelle est la différence principale entre un \`resource\` et un \`data\` source ?{
+~Un resource est plus rapide qu'un data source
+=Un resource crée/modifie des ressources, un data source les lit
+~Un data source coûte plus cher en AWS
+~Un resource ne peut pas être détruit
+}
+
+::Référence data source::Comment référencer l'account ID depuis un data source \`aws_caller_identity\` nommé "current" ?{
+~\`aws_caller_identity.current.account_id\`
+=\`data.aws_caller_identity.current.account_id\`
+~\`data.current.account_id\`
+~\`caller_identity.current.account_id\`
+}
+
+::Utilisation des outputs::Dans quel cas les outputs sont-ils particulièrement utiles ?{
+~Pour réduire la taille du fichier state
+=Pour partager des informations entre modules ou avec d'autres outils
+~Pour accélérer terraform apply
+~Pour valider la syntaxe du code
+}
+
+::Count vs For-Each::Quel est l'avantage principal de \`for_each\` par rapport à \`count\` ?{
+~for_each est plus rapide
+=for_each permet de référencer par clé significative au lieu d'index numérique
+~for_each consomme moins de ressources
+~for_each est obligatoire pour AWS
+}
+
+::Référence avec count::Comment accéder au deuxième bucket S3 créé avec \`count\` (ressource nommée "multiple") ?{
+~\`aws_s3_bucket.multiple.1\`
+=\`aws_s3_bucket.multiple[1]\`
+~\`aws_s3_bucket.multiple.second\`
+~\`aws_s3_bucket.multiple["1"]\`
+}
+
+::For-Each avec map::Quelle syntaxe utilise-t-on dans un \`for_each\` pour accéder à la clé et la valeur ?{
+~\`key\` et \`value\`
+=\`each.key\` et \`each.value\`
+~\`this.key\` et \`this.value\`
+~\`current.key\` et \`current.value\`
+}
+
+::Splat expression::Que fait l'expression \`aws_s3_bucket.multiple[*].id\` ?{
+~Retourne l'ID du premier bucket
+=Retourne une liste de tous les IDs des buckets
+~Crée une copie de tous les buckets
+~Détruit tous les buckets sauf le premier
+}
+
+::Ressource conditionnelle::Comment créer une ressource conditionnellement selon une variable booléenne \`enable_feature\` ?{
+~\`if \= var.enable_feature\`
+~\`count \= var.enable_feature\`
+=\`count \= var.enable_feature ? 1 \: 0\`
+~\`enabled \= var.enable_feature\`
+}
+
+::Expression ternaire::Que signifie l'expression \`local.is_prod ? "Enabled" \: "Disabled"\` ?{
+=Retourne "Enabled" si is_prod est true, sinon "Disabled"
+~Compare is_prod avec les chaînes "Enabled" et "Disabled"
+~Crée une variable qui change entre Enabled et Disabled
+~Valide que is_prod contient "Enabled" ou "Disabled"
+}
+
+::Bloc dynamic::À quoi servent les blocs \`dynamic\` dans Terraform ?{
+~À rendre l'infrastructure plus rapide
+=À créer des blocs de configuration conditionnellement
+~À chiffrer les données sensibles
+~À générer des noms aléatoires
+}
+
+::Logique environnement::Dans l'exercice 07, pourquoi force-t-on le versioning en production ?{
+~C'est une exigence AWS
+=Pour des raisons de conformité et protection des données
+~Pour réduire les coûts
+~Pour améliorer les performances
+}
+
+::Problème avec count::Que se passe-t-il si vous supprimez un élément au milieu d'une liste utilisée avec \`count\` ?{
+~Seul l'élément supprimé est détruit
+=Tous les éléments après celui supprimé sont recréés
+~Terraform refuse de supprimer l'élément
+~Rien, Terraform gère automatiquement
+}
+
+::Commande terraform output::Comment afficher uniquement la valeur d'un output spécifique nommé "bucket_arn" ?{
+~\`terraform show bucket_arn\`
+=\`terraform output bucket_arn\`
+~\`terraform get bucket_arn\`
+~\`terraform display bucket_arn\`
+}
+
+::For expression avec condition::Que fait cette expression \: \`[for k, v in var.configs \: k if v.enabled]\` ?{
+~Retourne tous les éléments de configs
+=Retourne les clés des éléments où enabled est true
+~Active tous les éléments de configs
+~Valide que enabled est défini
+}
